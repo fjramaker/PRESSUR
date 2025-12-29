@@ -1,1 +1,86 @@
-hello
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PRESSUR™ - Acoustic Wellness</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/session.js"></script>
+</head>
+<body>
+
+    <div class="container-fluid vh-100 d-flex flex-column justify-content-center align-items-center main-wrapper">
+        
+        <div class="text-center mb-5 content-width">
+            <h1 class="display-4 fw-bold mb-3 title-gradient">PRESSUR™</h1>
+            <p class="lead text-secondary-light">
+                PRESSUR™ represents a breakthrough in multi-sensory healing, combining cutting-edge binaural beat technology with user-centered design.
+            </p>
+        </div>
+
+        <div class="card login-card shadow-lg">
+            <div class="row g-0 h-100">
+                
+                <div class="col-md-6 d-none d-md-flex align-items-center justify-content-center img-panel">
+                    <img src="assets/img/focus.png" alt="Focus Mode" class="img-fluid login-img" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'bi bi-soundwave display-1 text-muted\'></i>'">
+                </div>
+
+                <div class="col-md-6 p-5 d-flex flex-column justify-content-center">
+                    <h3 class="mb-4">Welcome Back</h3>
+                    
+                    <form id="loginForm">
+                        <div class="mb-3">
+                            <label for="userSelect" class="form-label text-muted small">SELECT USER</label>
+                            <select class="form-select custom-input" id="userSelect">
+                                <option value="new" selected>+ Create New Profile</option>
+                                </select>
+                        </div>
+
+                        <div class="mb-3" id="nameGroup">
+                            <label for="userName" class="form-label text-muted small">NAME</label>
+                            <div class="input-group">
+                                <span class="input-group-text custom-addon"><i class="bi bi-person"></i></span>
+                                <input type="text" class="form-control custom-input" id="userName" placeholder="Enter your name">
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="userPin" class="form-label text-muted small">4-DIGIT PIN</label>
+                            <div class="input-group">
+                                <span class="input-group-text custom-addon"><i class="bi bi-lock"></i></span>
+                                <input type="password" class="form-control custom-input" id="userPin" maxlength="4" placeholder="••••" inputmode="numeric">
+                            </div>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-gradient btn-lg">
+                                Start Session
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        const userSelect = document.getElementById('userSelect');
+        const nameGroup = document.getElementById('nameGroup');
+
+        userSelect.addEventListener('change', function() {
+            if (this.value === 'new') {
+                nameGroup.style.display = 'block';
+            } else {
+                nameGroup.style.display = 'none';
+            }
+        });
+    </script>
+    <script src="js/app.js"></script>
+</body>
+</html>

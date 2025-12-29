@@ -1,0 +1,105 @@
+:root {
+    /* Color Palette based on images */
+    --bg-dark: #02040a;       /* Deepest black/blue */
+    --card-bg: #0b1121;       /* Lighter dark blue for frames */
+    --border-color: #1f293a;  /* Subtle borders */
+    --text-main: #ffffff;
+    --text-muted: #8b9bb4;
+    
+    /* Gradient */
+    --accent-start: #00c6ff;  /* Cyan/Blue */
+    --accent-end: #9d00ff;    /* Purple */
+}
+
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    overflow-x: hidden;
+}
+
+/* Typography & Layout Helpers */
+.text-secondary-light {
+    color: var(--text-muted);
+}
+
+.content-width {
+    max-width: 700px; /* Keeps the subtitle readable on wide tablets */
+}
+
+.title-gradient {
+    background: linear-gradient(to right, #fff, #aebaff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Card Styling */
+.login-card {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    width: 100%;
+    max-width: 900px;
+    min-height: 500px;
+    overflow: hidden;
+}
+
+/* Left Column (Image) */
+.img-panel {
+    background-color: #0D0C0C;
+    border-right: 1px solid var(--border-color);
+}
+
+.login-img {
+    max-height: 80%;
+    opacity: 0.9;
+}
+
+/* Form Styling */
+.form-label {
+    letter-spacing: 1px;
+    font-weight: 600;
+    font-size: 0.75rem;
+}
+
+/* Inputs */
+.custom-input {
+    background-color: #151b2e; 
+    border: 1px solid var(--border-color);
+    color: white;
+    padding: 12px;
+}
+
+.custom-input:focus {
+    background-color: #1a2238;
+    color: white;
+    border-color: var(--accent-start);
+    box-shadow: 0 0 0 0.25rem rgba(0, 198, 255, 0.15);
+}
+
+.custom-addon {
+    background-color: #151b2e;
+    border: 1px solid var(--border-color);
+    border-right: none;
+    color: var(--text-muted);
+}
+
+/* Dropdown fix for dark mode */
+.form-select.custom-input {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+}
+
+/* Gradient Button */
+.btn-gradient {
+    background: linear-gradient(90deg, var(--accent-start), var(--accent-end));
+    border: none;
+    color: white;
+    font-weight: 600;
+    border-radius: 50px; /* Pill shape */
+    transition: opacity 0.3s ease;
+}
+
+.btn-gradient:hover {
+    opacity: 0.9;
+    color: white;
+}
