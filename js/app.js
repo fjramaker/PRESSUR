@@ -75,6 +75,17 @@ function initializeLoginPage() {
             users.push(newUser);
             localStorage.setItem(USERS_KEY, JSON.stringify(users));
             Session.login(newUser);
+        } else {
+            // --- LOGIN EXISTING USER ---
+            const users = Session.getAllUsers();
+            const foundUser = users.find(u => u.id === selection);
+
+            if (foundUser && foundUser.pin === pin) {
+                Session.login(foundUser);
+            } else {
+                alert("Incorrect PIN. Please try again.");
+                document.getElementById('userPin').value = ''; // Clear PIN
+            }
         }
     });
 }
