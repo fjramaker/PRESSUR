@@ -64,7 +64,7 @@
 
     <div class="offcanvas offcanvas-end" tabindex="-1" id="navMenu">
         <div class="offcanvas-header">
-            <h5 class="offcanvas-title">Menu</h5>
+            <h5 class="offcanvas-title" id="menuWelcome">Menu</h5>
             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
         </div>
         <div class="offcanvas-body">
@@ -117,6 +117,10 @@
                 .then(response => response.json())
                 .then(data => renderCategories(data))
                 .catch(error => console.error('Error loading library:', error));
+            const user = Session.getCurrentUser();
+            if (user) {
+                document.getElementById('menuWelcome').textContent = `Welcome, ${user.name}`;
+            }
         });
 
         function renderCategories(library) {
@@ -130,7 +134,7 @@
                 
                 const cardHtml = `
                     <div class="col">
-                        <div class="category-card h-100">
+                        <div class="category-card">
                             <div class="accordion" id="parent-${accordionId}">
                                 <div class="accordion-item">
                                     <h2 class="accordion-header">

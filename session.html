@@ -1,1 +1,72 @@
-hello
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Session - PRESSUR™</title>
+    <link rel="icon" type="image/png" href="assets/img/logo.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/session.js"></script>
+</head>
+<body class="bg-dark text-white">
+
+    <div class="container vh-100 d-flex flex-column justify-content-center align-items-center">
+        <h2 id="sessionCategory" class="text-uppercase ls-1 mb-4 text-info">Loading...</h2>
+        
+        <div id="waveform" class="w-100 my-5" style="background: rgba(0,0,0,0.2); border-radius: 10px;"></div>
+
+        <div class="controls d-flex gap-4 align-items-center">
+            <button id="playPauseBtn" class="btn btn-lg btn-gradient rounded-pill px-5">Play</button>
+        </div>
+        
+        <a href="categories.html" class="btn btn-link text-secondary mt-5">Exit Session</a>
+    </div>
+
+    <script src="https://unpkg.com/wavesurfer.js@7"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. Parse URL Parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const trackPath = urlParams.get('track');
+            const category = urlParams.get('cat');
+
+            if (!trackPath) {
+                window.location.href = 'categories.html';
+                return;
+            }
+
+            // Update UI Title
+            document.getElementById('sessionCategory').textContent = category;
+
+            // 2. Initialize WaveSurfer
+            const wavesurfer = WaveSurfer.create({
+                container: '#waveform',
+                waveColor: '#4f4a85',
+                progressColor: '#00c6ff',
+                cursorColor: '#9d00ff',
+                barWidth: 3,
+                barRadius: 3,
+                responsive: true,
+                height: 200,
+            });
+
+            // Load the track (decoded from the URL)
+            wavesurfer.load(decodeURIComponent(trackPath));
+
+            // 3. Play/Pause Logic
+            const playPauseBtn = document.getElementById('playPauseBtn');
+            playPauseBtn.addEventListener('click', () => {
+                wavesurfer.playPause();
+                playPauseBtn.textContent = wavesurfer.isPlaying() ? 'Pause' : 'Play';
+            });
+
+            // Autoplay attempt (browsers often block this until first click)
+            wavesurfer.on('ready', () => {
+                // wavesurfer.play(); 
+            });
+        });
+    </script>
+</body>
+</html>
