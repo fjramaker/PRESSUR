@@ -6,67 +6,170 @@
     <title>Session - PRESSUR™</title>
     <link rel="icon" type="image/png" href="assets/img/logo.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link rel="stylesheet" href="css/style.css">
     <script src="js/session.js"></script>
+
+    <style>
+        /* Frame Constraints */
+        .session-frame {
+            max-width: 900px;
+            width: 100%;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+        }
+
+        /* Pulsing Animation for Start Button */
+        @keyframes pulse-border {
+            0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(255, 255, 255, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
+        }
+
+        .btn-pulse {
+            animation: pulse-border 2s infinite;
+            border: 2px solid white !important;
+        }
+
+        /* Visualization container height */
+        #waveform {
+            cursor: pointer;
+            position: relative;
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+            height: 250px; /* Increased height */
+            overflow: hidden;
+        }
+
+        .volume-slider {
+            width: 150px;
+            accent-color: var(--accent-start);
+        }
+    </style>
 </head>
 <body class="bg-dark text-white">
 
-    <div class="container vh-100 d-flex flex-column justify-content-center align-items-center">
-        <h2 id="sessionCategory" class="text-uppercase ls-1 mb-4 text-info">Loading...</h2>
+    <div class="container py-5 d-flex flex-column align-items-center">
         
-        <div id="waveform" class="w-100 my-5" style="background: rgba(0,0,0,0.2); border-radius: 10px;"></div>
+        <div class="session-frame p-4 mb-4 shadow-lg" id="playerFrame">
+            <div class="d-flex justify-content-between align-items-start mb-3">
+                <div>
+                    <h2 id="sessionCategory" class="text-uppercase ls-1 mb-1 text-info">Category</h2>
+                    <p id="trackTitle" class="text-secondary-light">Track Name</p>
+                </div>
+                <button class="btn btn-outline-light btn-sm" onclick="toggleFullScreen()">
+                    <i class="bi bi-arrows-fullscreen"></i>
+                </button>
+            </div>
 
-        <div class="controls d-flex gap-4 align-items-center">
-            <button id="playPauseBtn" class="btn btn-lg btn-gradient rounded-pill px-5">Play</button>
+            <div id="waveform" class="mb-4"></div>
+
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center gap-3">
+                    <button id="playPauseBtn" class="btn btn-gradient rounded-circle d-flex align-items-center justify-content-center btn-pulse" style="width: 60px; height: 60px;">
+                        <i class="bi bi-play-fill fs-2" id="playIcon"></i>
+                    </button>
+                    
+                    <div class="d-flex align-items-center ms-3">
+                        <i class="bi bi-volume-up me-2 text-secondary"></i>
+                        <input type="range" class="volume-slider" id="volumeSlider" min="0" max="1" step="0.1" value="0.5">
+                    </div>
+                </div>
+
+                <button class="btn btn-outline-secondary rounded-pill px-3" id="favBtn">
+                    <i class="bi bi-star me-2"></i>Add to Favorites
+                </button>
+            </div>
         </div>
-        
-        <a href="categories.html" class="btn btn-link text-secondary mt-5">Exit Session</a>
+
+        <div id="remainingFrames" class="w-100 d-flex flex-column align-items-center">
+             </div>
+
     </div>
 
     <script src="https://unpkg.com/wavesurfer.js@7"></script>
 
     <script>
+        let wavesurfer;
+
         document.addEventListener('DOMContentLoaded', () => {
-            // 1. Parse URL Parameters
             const urlParams = new URLSearchParams(window.location.search);
-            const trackPath = urlParams.get('track');
+            const trackPath = decodeURIComponent(urlParams.get('track'));
             const category = urlParams.get('cat');
 
-            if (!trackPath) {
-                window.location.href = 'categories.html';
-                return;
-            }
-
-            // Update UI Title
+            // Set Titles
             document.getElementById('sessionCategory').textContent = category;
+            document.getElementById('trackTitle').textContent = trackPath.split('/').pop().replace(/-compr\.mp3$/, '').replace(/-/g, ' ');
 
-            // 2. Initialize WaveSurfer
-            const wavesurfer = WaveSurfer.create({
+            // 1. Initialize Wavesurfer with SCROLLING and HEIGHT fixes
+            wavesurfer = WaveSurfer.create({
                 container: '#waveform',
                 waveColor: '#4f4a85',
                 progressColor: '#00c6ff',
-                cursorColor: '#9d00ff',
-                barWidth: 3,
-                barRadius: 3,
-                responsive: true,
-                height: 200,
+                cursorColor: '#ffffff',
+                barWidth: 4,
+                barGap: 3,
+                height: 250,      // More vertical space
+                minPxPerSec: 50,  // Forces horizontal scroll for long tracks
+                autoCenter: true, // Keep playhead centered
+                hideScrollbar: false,
+                interact: true
             });
 
-            // Load the track (decoded from the URL)
-            wavesurfer.load(decodeURIComponent(trackPath));
+            wavesurfer.load(trackPath);
 
-            // 3. Play/Pause Logic
-            const playPauseBtn = document.getElementById('playPauseBtn');
-            playPauseBtn.addEventListener('click', () => {
+            // 2. Play/Pause & Media Session API
+            const btn = document.getElementById('playPauseBtn');
+            const icon = document.getElementById('playIcon');
+
+            const togglePlay = () => {
                 wavesurfer.playPause();
-                playPauseBtn.textContent = wavesurfer.isPlaying() ? 'Pause' : 'Play';
+                const isPlaying = wavesurfer.isPlaying();
+                
+                // UI Toggle
+                icon.className = isPlaying ? 'bi bi-pause-fill fs-2' : 'bi bi-play-fill fs-2';
+                btn.classList.toggle('btn-pulse', !isPlaying);
+
+                // Media Session API (Bluetooth Controls)
+                if ('mediaSession' in navigator) {
+                    navigator.mediaSession.playbackState = isPlaying ? 'playing' : 'paused';
+                }
+            };
+
+            btn.addEventListener('click', togglePlay);
+
+            // Setup Media Session metadata
+            wavesurfer.on('ready', () => {
+                if ('mediaSession' in navigator) {
+                    navigator.mediaSession.metadata = new MediaMetadata({
+                        title: document.getElementById('trackTitle').textContent,
+                        artist: 'PRESSUR™',
+                        album: category,
+                        artwork: [{ src: 'assets/img/logo.png', sizes: '512x512', type: 'image/png' }]
+                    });
+                    
+                    navigator.mediaSession.setActionHandler('play', togglePlay);
+                    navigator.mediaSession.setActionHandler('pause', togglePlay);
+                }
             });
 
-            // Autoplay attempt (browsers often block this until first click)
-            wavesurfer.on('ready', () => {
-                // wavesurfer.play(); 
+            // Volume Control
+            document.getElementById('volumeSlider').addEventListener('input', (e) => {
+                wavesurfer.setVolume(e.target.value);
             });
         });
+
+        function toggleFullScreen() {
+            const elem = document.getElementById('playerFrame');
+            if (!document.fullscreenElement) {
+                elem.requestFullscreen().catch(err => {
+                    alert(`Error attempting to enable full-screen mode: ${err.message}`);
+                });
+            } else {
+                document.exitFullscreen();
+            }
+        }
     </script>
 </body>
 </html>
