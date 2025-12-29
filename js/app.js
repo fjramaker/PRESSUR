@@ -48,7 +48,17 @@ function initializeLoginPage() {
         
         if (selection === 'new') {
             // --- CREATE NEW USER ---
-            const name = document.getElementById('userName').value;
+            const name = document.getElementById('userName').value.trim();
+            const users = Session.getAllUsers();
+
+            // Check for duplicate names (Case Insensitive)
+            const nameExists = users.some(u => u.name.toLowerCase() === name.toLowerCase());
+            
+            if (nameExists) {
+                alert("This name is already taken. Please choose another or select your profile from the list.");
+                return;
+            }
+
             if (!name || pin.length !== 4) {
                 alert("Please enter a name and a 4-digit PIN.");
                 return;
@@ -62,25 +72,9 @@ function initializeLoginPage() {
                 stats: { totalSessions: 0, totalMinutes: 0 }
             };
 
-            // Save to "Database"
-            const users = Session.getAllUsers();
             users.push(newUser);
             localStorage.setItem(USERS_KEY, JSON.stringify(users));
-
-            // Log them in
             Session.login(newUser);
-
-        } else {
-            // --- LOGIN EXISTING USER ---
-            const users = Session.getAllUsers();
-            const foundUser = users.find(u => u.id === selection);
-
-            if (foundUser && foundUser.pin === pin) {
-                Session.login(foundUser);
-            } else {
-                alert("Incorrect PIN. Please try again.");
-                document.getElementById('userPin').value = ''; // Clear PIN
-            }
         }
     });
 }
