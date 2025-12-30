@@ -3,24 +3,24 @@
     "icon": "bi-lungs",
     "hz": "-",
     "description": "Healing-focused soundscapes that support tissue oxygenation and cellular regeneration.",
-    "tracks": ["1.healing-forest-compr.mp3", "2.healing-freq-compr.mp3"]
+    "tracks": ["1.healing_forest-compr.mp3", "2.healing_frequency-compr.mp3"]
   },
   "meditation": {
     "icon": "bi-yin-yang",
     "hz": "11",
     "description": "Calm parasympathetic activation, reduce cortisol levels through deeply resonant frequencies.",
-    "tracks": ["8.meditation-11hz-alpha-binaural-compr.mp3", "3.ocean-meditation-compr.mp3"]
+    "tracks": ["8.meditation_11hz_alpha_binaural-compr.mp3", "3.ocean_choir_meditation-compr.mp3"]
   },
   "focus": {
     "icon": "bi-heart-pulse",
     "hz": "-",
     "description": "Enhance cognitive flexibility, deep meditation, and trauma integration through gamma-theta blends.",
-    "tracks": ["7.birds-piano-compr.mp3", "6.pure-theta-4-7hz-piano-compr.mp3"]
+    "tracks": ["7.birds_piano-compr.mp3", "6.pure_theta_4-7hz_piano-compr.mp3"]
   },
   "sleep preparation": {
     "icon": "bi-moon-stars",
     "hz": "4-7",
     "description": "Lower-frequency binaural beats designed to wind down past-chamber for restorative sleep.",
-    "tracks": ["4.pure-theta-4-7hz-water-compr.mp3", "5.pure-theta-4-7hz-rain-music-compr.mp3", "6.pure-theta-4-7hz-piano-compr.mp3"]
+    "tracks": ["4.pure_theta_4-7hz_water-compr.mp3", "5.pure_theta_4-7hz_rain-compr.mp3", "6.pure_theta_4-7hz_piano-compr.mp3"]
   }
 }

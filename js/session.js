@@ -51,6 +51,45 @@ const Session = {
             window.location.href = 'categories.html';
         }
     }
+    
+    toggleFavorite: (trackId) => {
+        const users = JSON.parse(localStorage.getItem(USERS_KEY));
+        const currentUser = Session.getCurrentUser();
+        const userIndex = users.findIndex(u => u.id === currentUser.id);
+        
+        const favIndex = users[userIndex].favorites.indexOf(trackId);
+        if (favIndex > -1) {
+            users[userIndex].favorites.splice(favIndex, 1); // Remove if exists
+        } else {
+            users[userIndex].favorites.push(trackId); // Add if not
+        }
+        
+        // Update both DB and current session
+        localStorage.setItem(USERS_KEY, JSON.stringify(users));
+        localStorage.setItem(SESSION_KEY, JSON.stringify(users[userIndex]));
+        return users[userIndex].favorites.includes(trackId);
+    },
+
+    isFavorite: (trackId) => {
+        const user = Session.getCurrentUser();
+        return user && user.favorites ? user.favorites.includes(trackId) : false;
+    }
+    
+    saveSessionStats: (mins) => {
+        const users = JSON.parse(localStorage.getItem(USERS_KEY));
+        const currentUser = Session.getCurrentUser();
+        const userIndex = users.findIndex(u => u.id === currentUser.id);
+
+        // Update stats
+        users[userIndex].stats.totalSessions += 1;
+        users[userIndex].stats.totalMinutes = (users[userIndex].stats.totalMinutes || 0) + mins;
+        
+        // Convert minutes to hours for the display
+        users[userIndex].stats.totalHours = (users[userIndex].stats.totalMinutes / 60).toFixed(1);
+
+        localStorage.setItem(USERS_KEY, JSON.stringify(users));
+        localStorage.setItem(SESSION_KEY, JSON.stringify(users[userIndex]));
+    }
 };
 
 // Run the check immediately

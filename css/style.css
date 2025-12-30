@@ -132,3 +132,45 @@ body {
 .accordion-body {
   color: #d3d3d3;
 }
+
+.text-gradient {
+    background: linear-gradient(90deg, var(--accent-start), var(--accent-end));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.x-small { font-size: 0.7rem; }
+.ls-1 { letter-spacing: 1px; }
+
+/* Custom Waveform Styling */
+#waveform ::-webkit-scrollbar {
+    height: 4px;
+}
+#waveform ::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.1);
+    border-radius: 10px;
+}
+
+/* Pulsing heart effect */
+.pulse-slow {
+    animation: pulse-red 2s infinite;
+}
+@keyframes pulse-red {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.1); opacity: 0.8; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.nav-link-custom {
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+}
+
+/* Bold and highlighted state for active page */
+.nav-link-custom.active-page {
+    background: rgba(0, 198, 255, 0.1) !important;
+    border: 1px solid rgba(0, 198, 255, 0.2);
+    font-weight: 700 !important; /* Bold */
+}
+
+.x-small { font-size: 0.7rem; }
