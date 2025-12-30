@@ -50,7 +50,7 @@ const Session = {
         if ((page === 'index.html' || page === '') && currentUser) {
             window.location.href = 'categories.html';
         }
-    }
+    },
     
     toggleFavorite: (trackId) => {
         const users = JSON.parse(localStorage.getItem(USERS_KEY));
@@ -73,7 +73,7 @@ const Session = {
     isFavorite: (trackId) => {
         const user = Session.getCurrentUser();
         return user && user.favorites ? user.favorites.includes(trackId) : false;
-    }
+    },
     
     saveSessionStats: (mins) => {
         const users = JSON.parse(localStorage.getItem(USERS_KEY));
