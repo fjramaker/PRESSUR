@@ -49,6 +49,8 @@
     </style>
 </head>
 
+<body class="bg-dark text-white">
+
 <nav class="navbar navbar-dark">
     <div class="container-fluid">
         <span class="navbar-brand fw-bold title-gradient">PRESSUR™</span>
@@ -89,348 +91,346 @@
         </ul>
 
         <div id="menuTimerSection" class="d-none mt-auto pt-4 border-top border-secondary border-opacity-25 text-center">
-            <p class="x-small text-uppercase ls-1 text-muted mb-1">Chamber Session</p>
+            <p class="x-small text-uppercase ls-1 text-light mb-1">Chamber Session</p>
             <div class="h3 fw-bold text-gradient mb-0" id="menuTimerClock">00:00</div>
-            <p class="x-small text-muted">remaining</p>
+            <p class="x-small text-light">remaining</p>
         </div>
     </div>
 </div>
 
-<body class="bg-dark text-white">
+<div class="container py-5 d-flex flex-column align-items-center">
 
-    <div class="container py-5 d-flex flex-column align-items-center">
-    
-        <div class="session-frame p-4 mb-4 shadow-lg" id="playerFrame">
-            <div class="d-flex justify-content-between align-items-start mb-2">
-                <div>
-                    <h2 id="sessionCategory" class="text-uppercase ls-1 mb-0 text-info" style="font-size: 1.2rem;">Category</h2>
-                    <p id="trackTitle" class="text-white fw-light opacity-75">Track Name</p>
-                </div>
-                <button class="btn btn-link text-white opacity-50 p-0" onclick="toggleFullScreen()">
-                    <i class="bi bi-arrows-fullscreen"></i>
+    <div class="session-frame p-4 mb-4 shadow-lg" id="playerFrame">
+        <div class="d-flex justify-content-between align-items-start mb-2">
+            <div>
+                <h2 id="sessionCategory" class="text-uppercase ls-1 mb-0 text-info" style="font-size: 1.2rem;">Category</h2>
+                <p id="trackTitle" class="text-white fw-light opacity-75">Track Name</p>
+            </div>
+            <button class="btn btn-link text-white opacity-50 p-0" onclick="toggleFullScreen()">
+                <i class="bi bi-arrows-fullscreen"></i>
+            </button>
+        </div>
+
+        <div id="waveform" class="mb-2"></div>
+
+        <div class="d-flex justify-content-between px-1 mb-3" style="font-size: 0.85rem; font-family: monospace;">
+            <span id="currentTime">00:00</span>
+            <span id="totalDuration">00:00</span>
+        </div>
+
+        <div class="row align-items-center">
+            <div class="col-4">
+                <button class="btn btn-outline-secondary btn-sm rounded-pill border-0" id="favBtn">
+                    <i class="bi bi-star me-2"></i>Favorite
                 </button>
             </div>
-
-            <div id="waveform" class="mb-2"></div>
-
-            <div class="d-flex justify-content-between px-1 mb-3" style="font-size: 0.85rem; font-family: monospace;">
-                <span id="currentTime">00:00</span>
-                <span id="totalDuration">00:00</span>
+            <div class="col-4 text-center">
+                <button id="playPauseBtn" class="btn btn-gradient rounded-circle mx-auto d-flex align-items-center justify-content-center btn-pulse" style="width: 60px; height: 60px;">
+                    <i class="bi bi-play-fill fs-2" id="playIcon"></i>
+                </button>
             </div>
+            <div class="col-4 d-flex justify-content-end align-items-center">
+                <i class="bi bi-volume-down-fill me-2 text-secondary"></i>
+                <input type="range" class="volume-slider" id="volumeSlider" min="0" max="1" step="0.05" value="0.5">
+            </div>
+        </div>
+    </div>
 
-            <div class="row align-items-center">
-                <div class="col-4">
-                    <button class="btn btn-outline-secondary btn-sm rounded-pill border-0" id="favBtn">
-                        <i class="bi bi-star me-2"></i>Favorite
-                    </button>
+    <div class="session-frame p-3 mb-4 d-flex justify-content-between align-items-center px-4 border-info border-opacity-25">
+        <div class="d-flex align-items-center">
+            <i class="bi bi-heart-fill text-danger me-3 fs-4 pulse-slow"></i>
+            <span class="text-uppercase fw-bold ls-1 small">Heart Rate</span>
+        </div>
+        <div class="h3 mb-0 fw-bold"><span id="bpmVal">72</span> <small class="fs-6 text-muted">BPM</small></div>
+    </div>
+
+    <div class="row w-100" style="max-width: 900px;">
+        <div class="col-md-6 ps-0 pe-2">
+            <div class="session-frame p-4 h-100">
+                <h6 class="text-uppercase ls-1 mb-3 small text-info"><i class="bi bi-clock-history me-2"></i>Session Duration</h6>
+                <div class="d-grid gap-2" id="durationButtons">
+                    <div class="row g-2">
+                        <div class="col-6"><button class="btn btn-outline-light w-100 py-2 btn-duration" data-mins="15">15m</button></div>
+                        <div class="col-6"><button class="btn btn-outline-light w-100 py-2 btn-duration" data-mins="30">30m</button></div>
+                        <div class="col-6"><button class="btn btn-outline-light w-100 py-2 btn-duration" data-mins="45">45m</button></div>
+                        <div class="col-6"><button class="btn btn-outline-light w-100 py-2 btn-duration" data-mins="60">60m</button></div>
+                    </div>
                 </div>
-                <div class="col-4 text-center">
-                    <button id="playPauseBtn" class="btn btn-gradient rounded-circle mx-auto d-flex align-items-center justify-content-center btn-pulse" style="width: 60px; height: 60px;">
-                        <i class="bi bi-play-fill fs-2" id="playIcon"></i>
-                    </button>
-                </div>
-                <div class="col-4 d-flex justify-content-end align-items-center">
-                    <i class="bi bi-volume-down-fill me-2 text-secondary"></i>
-                    <input type="range" class="volume-slider" id="volumeSlider" min="0" max="1" step="0.05" value="0.5">
+                <div id="activeTimerDisplay" class="d-none text-center py-3">
+                    <div class="display-6 fw-bold text-gradient" id="timerClock">00:00</div>
+                    <p class="small text-muted mt-2">Remaining in session</p>
                 </div>
             </div>
         </div>
 
-        <div class="session-frame p-3 mb-4 d-flex justify-content-between align-items-center px-4 border-info border-opacity-25">
-            <div class="d-flex align-items-center">
-                <i class="bi bi-heart-fill text-danger me-3 fs-4 pulse-slow"></i>
-                <span class="text-uppercase fw-bold ls-1 small">Heart Rate</span>
-            </div>
-            <div class="h3 mb-0 fw-bold"><span id="bpmVal">72</span> <small class="fs-6 text-muted">BPM</small></div>
-        </div>
-
-        <div class="row w-100" style="max-width: 900px;">
-            <div class="col-md-6 ps-0 pe-2">
-                <div class="session-frame p-4 h-100">
-                    <h6 class="text-uppercase ls-1 mb-3 small text-info"><i class="bi bi-clock-history me-2"></i>Session Duration</h6>
-                    <div class="d-grid gap-2" id="durationButtons">
-                        <div class="row g-2">
-                            <div class="col-6"><button class="btn btn-outline-light w-100 py-2 btn-duration" data-mins="15">15m</button></div>
-                            <div class="col-6"><button class="btn btn-outline-light w-100 py-2 btn-duration" data-mins="30">30m</button></div>
-                            <div class="col-6"><button class="btn btn-outline-light w-100 py-2 btn-duration" data-mins="45">45m</button></div>
-                            <div class="col-6"><button class="btn btn-outline-light w-100 py-2 btn-duration" data-mins="60">60m</button></div>
-                        </div>
+        <div class="col-md-6 pe-0 ps-2">
+            <div class="session-frame p-4 h-100">
+                <div class="opacity-50">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <div><h6 class="mb-0 small fw-bold">Biometric Adaptation</h6><p class="x-small text-muted mb-0">Auto-adjust intensity</p></div>
+                        <div class="form-check form-switch"><input class="form-check-input" type="checkbox" disabled></div>
                     </div>
-                    <div id="activeTimerDisplay" class="d-none text-center py-3">
-                        <div class="display-6 fw-bold text-gradient" id="timerClock">00:00</div>
-                        <p class="small text-muted mt-2">Remaining in session</p>
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div><h6 class="mb-0 small fw-bold">PRESSUR™ Sync</h6><p class="x-small text-muted mb-0">Sync chamber lighting</p></div>
+                        <div class="form-check form-switch"><input class="form-check-input" type="checkbox" disabled></div>
                     </div>
+                    <button class="btn btn-dark btn-sm w-100 mb-3 text-muted"><i class="bi bi-download me-2"></i>Download for Offline</button>
                 </div>
-            </div>
-
-            <div class="col-md-6 pe-0 ps-2">
-                <div class="session-frame p-4 h-100">
-                    <div class="opacity-50">
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <div><h6 class="mb-0 small fw-bold">Biometric Adaptation</h6><p class="x-small text-muted mb-0">Auto-adjust intensity</p></div>
-                            <div class="form-check form-switch"><input class="form-check-input" type="checkbox" disabled></div>
-                        </div>
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <div><h6 class="mb-0 small fw-bold">PRESSUR™ Sync</h6><p class="x-small text-muted mb-0">Sync chamber lighting</p></div>
-                            <div class="form-check form-switch"><input class="form-check-input" type="checkbox" disabled></div>
-                        </div>
-                        <button class="btn btn-dark btn-sm w-100 mb-3 text-muted"><i class="bi bi-download me-2"></i>Download for Offline</button>
+                <hr class="border-secondary opacity-25">
+                <div class="row text-center mt-3">
+                    <div class="col-6 border-end border-secondary border-opacity-25">
+                        <div class="small text-muted text-uppercase ls-1">Sessions</div>
+                        <div class="fw-bold" id="statSessions">0</div>
                     </div>
-                    <hr class="border-secondary opacity-25">
-                    <div class="row text-center mt-3">
-                        <div class="col-6 border-end border-secondary border-opacity-25">
-                            <div class="small text-muted text-uppercase ls-1">Sessions</div>
-                            <div class="fw-bold" id="statSessions">0</div>
-                        </div>
-                        <div class="col-6">
-                            <div class="small text-muted text-uppercase ls-1">Total Hrs</div>
-                            <div class="fw-bold" id="statHours">0.0</div>
-                        </div>
+                    <div class="col-6">
+                        <div class="small text-muted text-uppercase ls-1">Total Hrs</div>
+                        <div class="fw-bold" id="statHours">0.0</div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <script src="https://unpkg.com/wavesurfer.js@7"></script>
+<script src="https://unpkg.com/wavesurfer.js@7"></script>
 
-    <script>
-        let wavesurfer;
+<script>
+    let wavesurfer;
 
-        document.addEventListener('DOMContentLoaded', () => {
-            const urlParams = new URLSearchParams(window.location.search);
-            const trackPath = decodeURIComponent(urlParams.get('track'));
-            const category = urlParams.get('cat');
+    document.addEventListener('DOMContentLoaded', () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const trackPath = decodeURIComponent(urlParams.get('track'));
+        const category = urlParams.get('cat');
 
-            // Set Titles
-            document.getElementById('sessionCategory').textContent = category;
-            document.getElementById('trackTitle').textContent = trackPath.split('/').pop().replace(/-compr\.mp3$/, '').replace(/-/g, ' ');
-            
-            // 1. Time Formatting Helper
-            const formatTime = (seconds) => {
-                const mins = Math.floor(seconds / 60);
-                const secs = Math.floor(seconds % 60);
-                return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-            };
+        // Set Titles
+        document.getElementById('sessionCategory').textContent = category;
+        document.getElementById('trackTitle').textContent = trackPath.split('/').pop().replace(/-compr\.mp3$/, '').replace(/_/g, ' ').replace(/^\d+\./, '');
+        
+        // 1. Time Formatting Helper
+        const formatTime = (seconds) => {
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        };
 
-            // 2. Initialize Wavesurfer
-            wavesurfer = WaveSurfer.create({
-                container: '#waveform',
-                waveColor: 'rgba(79, 74, 133, 0.5)',
-                progressColor: '#00c6ff',
-                cursorColor: '#ffffff',
-                barWidth: 3,
-                barGap: 3,
-                height: 120, // Reduced to leave room for stamps
-                minPxPerSec: 30, // Higher number = more zoomed in/scrolling
-                autoCenter: true,
-                interact: true,
-                fillParent: true
-            });
-
-            // Update timestamps on progress
-            wavesurfer.on('audioprocess', (time) => {
-                document.getElementById('currentTime').textContent = formatTime(time);
-            });
-
-            wavesurfer.on('ready', () => {
-                document.getElementById('totalDuration').textContent = formatTime(wavesurfer.getDuration());
-            });
-
-            // 3. Heart Rate Faker
-            setInterval(() => {
-                const base = 72;
-                const drift = Math.floor(Math.random() * 5) - 2;
-                document.getElementById('bpmVal').textContent = base + drift;
-            }, 3000);
-
-            // 4. SESSION TIMER LOGIC (Bound to User)
-            const currentUser = Session.getCurrentUser();
-            const SESSION_STATE_KEY = `pressur_active_session_${currentUser.id}`;
-
-            const startSessionTimer = (minutes) => {
-                const durationMs = minutes * 60 * 1000;
-                const endTime = Date.now() + durationMs;
-                const state = { endTime, durationMins: parseInt(minutes), isActive: true };
-                localStorage.setItem(SESSION_STATE_KEY, JSON.stringify(state));
-                
-                // Visual feedback: briefly flash the timer
-                document.getElementById('activeTimerDisplay').style.opacity = "0";
-                updateTimerUI();
-                setTimeout(() => document.getElementById('activeTimerDisplay').style.opacity = "1", 100);
-            };
-
-            const updateTimerUI = () => {
-                const state = JSON.parse(localStorage.getItem(SESSION_STATE_KEY));
-                if (!state || !state.isActive) {
-                    document.getElementById('durationButtons').classList.remove('d-none');
-                    document.getElementById('activeTimerDisplay').classList.add('d-none');
-                    return;
-                }
-
-                document.getElementById('durationButtons').classList.add('d-none');
-                document.getElementById('activeTimerDisplay').classList.remove('d-none');
-
-                // Clear any existing interval to prevent "doubling up"
-                if (window.sessionInterval) clearInterval(window.sessionInterval);
-
-                window.sessionInterval = setInterval(() => {
-                    const remaining = state.endTime - Date.now();
-                    
-                    if (remaining <= 0) {
-                        clearInterval(window.sessionInterval);
-                        finishSession(state.durationMins);
-                    } else {
-                        const timeStr = formatTime(remaining / 1000);
-                        document.getElementById('timerClock').textContent = timeStr;
-                        // Also update the menu timer if it exists on this page
-                        if (document.getElementById('menuTimerClock')) {
-                            document.getElementById('menuTimerClock').textContent = timeStr;
-                        }
-                    }
-                }, 1000);
-            };
-
-            const finishSession = (mins) => {
-                localStorage.removeItem(SESSION_STATE_KEY);
-                
-                // Update the "Database"
-                Session.saveSessionStats(mins);
-                
-                // Play a gentle alert if you have one, or just the modal
-                alert("Congratulations Session Completed! Your session has finished. Take some time to gather yourself, you're ready for whatever the rest of the day brings.");
-                
-                // Refresh UI to show updated stats in the right-side frame
-                updateStatsDisplay();
-                updateTimerUI();
-            };
-
-            const updateStatsDisplay = () => {
-                const user = Session.getCurrentUser();
-                if (user && user.stats) {
-                    document.getElementById('statSessions').textContent = user.stats.totalSessions || 0;
-                    document.getElementById('statHours').textContent = (user.stats.totalMinutes / 60).toFixed(1) || "0.0";
-                }
-            };
-
-            // Call on load
-            updateStatsDisplay();
-            updateTimerUI();
-
-            // Listen for duration clicks
-            document.querySelectorAll('.btn-duration').forEach(btn => {
-                btn.addEventListener('click', () => startSessionTimer(btn.dataset.mins));
-            });
-
-            wavesurfer.load(trackPath);
-
-            // 2. Play/Pause & Media Session API
-            const btn = document.getElementById('playPauseBtn');
-            const icon = document.getElementById('playIcon');
-
-            const togglePlay = () => {
-                wavesurfer.playPause();
-                const isPlaying = wavesurfer.isPlaying();
-                
-                // UI Toggle
-                icon.className = isPlaying ? 'bi bi-pause-fill fs-2' : 'bi bi-play-fill fs-2';
-                btn.classList.toggle('btn-pulse', !isPlaying);
-
-                // Media Session API (Bluetooth Controls)
-                if ('mediaSession' in navigator) {
-                    navigator.mediaSession.playbackState = isPlaying ? 'playing' : 'paused';
-                }
-            };
-
-            btn.addEventListener('click', togglePlay);
-
-            // Setup Media Session metadata
-            wavesurfer.on('ready', () => {
-                if ('mediaSession' in navigator) {
-                    navigator.mediaSession.metadata = new MediaMetadata({
-                        title: document.getElementById('trackTitle').textContent,
-                        artist: 'PRESSUR™',
-                        album: category,
-                        artwork: [{ src: 'assets/img/logo.png', sizes: '512x512', type: 'image/png' }]
-                    });
-                    
-                    navigator.mediaSession.setActionHandler('play', togglePlay);
-                    navigator.mediaSession.setActionHandler('pause', togglePlay);
-                }
-            });
-
-            // Volume Control
-            document.getElementById('volumeSlider').addEventListener('input', (e) => {
-                wavesurfer.setVolume(e.target.value);
-            });
-            
-            // Menu
-            // 1. Set Welcome Name
-            const user = Session.getCurrentUser();
-            if (user) {
-                document.getElementById('menuWelcome').textContent = `Welcome, ${user.name}`;
-            }
-
-            // 2. Highlight Active Page
-            const currentPage = window.location.pathname.split("/").pop() || 'index.html';
-            if (currentPage === 'categories.html') document.getElementById('nav-categories').classList.add('active-page');
-            if (currentPage === 'session.html') document.getElementById('nav-session').classList.add('active-page');
-
-            // 3. Persistent Menu Timer
-            const updateMenuTimer = () => {
-                if (!user) return;
-                const state = JSON.parse(localStorage.getItem(`pressur_active_session_${user.id}`));
-                const timerSection = document.getElementById('menuTimerSection');
-                const timerClock = document.getElementById('menuTimerClock');
-
-                if (state && state.isActive) {
-                    timerSection.classList.remove('d-none');
-                    const remaining = state.endTime - Date.now();
-                    if (remaining > 0) {
-                        const mins = Math.floor(remaining / 1000 / 60);
-                        const secs = Math.floor((remaining / 1000) % 60);
-                        timerClock.textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-                    } else {
-                        timerSection.classList.add('d-none'); // Hide when done
-                    }
-                } else {
-                    timerSection.classList.add('d-none');
-                }
-            };
-
-            // Run timer update every second
-            setInterval(updateMenuTimer, 1000);
-            updateMenuTimer();
-            
-            // Favourite
-            const favBtn = document.getElementById('favBtn');
-            const trackFilename = decodeURIComponent(urlParams.get('track')).split('/').pop();
-
-            // Initial State Check
-            const updateFavUI = (isFav) => {
-                favBtn.innerHTML = isFav ? '<i class="bi bi-star-fill me-2 text-warning"></i>Favorited' : '<i class="bi bi-star me-2"></i>Add to Favorites';
-                favBtn.classList.toggle('border-warning', isFav);
-            };
-
-            updateFavUI(Session.isFavorite(trackFilename));
-
-            // Click Event
-            favBtn.addEventListener('click', () => {
-                const newState = Session.toggleFavorite(trackFilename);
-                updateFavUI(newState);
-            });
+        // 2. Initialize Wavesurfer
+        wavesurfer = WaveSurfer.create({
+            container: '#waveform',
+            waveColor: 'rgba(79, 74, 133, 0.5)',
+            progressColor: '#00c6ff',
+            cursorColor: '#ffffff',
+            barWidth: 3,
+            barGap: 3,
+            height: 120, // Reduced to leave room for stamps
+            minPxPerSec: 30, // Higher number = more zoomed in/scrolling
+            autoCenter: true,
+            interact: true,
+            fillParent: true
         });
 
-        function toggleFullScreen() {
-            const elem = document.getElementById('playerFrame');
-            if (!document.fullscreenElement) {
-                elem.requestFullscreen().catch(err => {
-                    alert(`Error attempting to enable full-screen mode: ${err.message}`);
-                });
-            } else {
-                document.exitFullscreen();
+        // Update timestamps on progress
+        wavesurfer.on('audioprocess', (time) => {
+            document.getElementById('currentTime').textContent = formatTime(time);
+        });
+
+        wavesurfer.on('ready', () => {
+            document.getElementById('totalDuration').textContent = formatTime(wavesurfer.getDuration());
+        });
+
+        // 3. Heart Rate Faker
+        setInterval(() => {
+            const base = 72;
+            const drift = Math.floor(Math.random() * 5) - 2;
+            document.getElementById('bpmVal').textContent = base + drift;
+        }, 3000);
+
+        // 4. SESSION TIMER LOGIC (Bound to User)
+        const currentUser = Session.getCurrentUser();
+        const SESSION_STATE_KEY = `pressur_active_session_${currentUser.id}`;
+
+        const startSessionTimer = (minutes) => {
+            const durationMs = minutes * 60 * 1000;
+            const endTime = Date.now() + durationMs;
+            const state = { endTime, durationMins: parseInt(minutes), isActive: true };
+            localStorage.setItem(SESSION_STATE_KEY, JSON.stringify(state));
+            
+            // Visual feedback: briefly flash the timer
+            document.getElementById('activeTimerDisplay').style.opacity = "0";
+            updateTimerUI();
+            setTimeout(() => document.getElementById('activeTimerDisplay').style.opacity = "1", 100);
+        };
+
+        const updateTimerUI = () => {
+            const state = JSON.parse(localStorage.getItem(SESSION_STATE_KEY));
+            if (!state || !state.isActive) {
+                document.getElementById('durationButtons').classList.remove('d-none');
+                document.getElementById('activeTimerDisplay').classList.add('d-none');
+                return;
             }
+
+            document.getElementById('durationButtons').classList.add('d-none');
+            document.getElementById('activeTimerDisplay').classList.remove('d-none');
+
+            // Clear any existing interval to prevent "doubling up"
+            if (window.sessionInterval) clearInterval(window.sessionInterval);
+
+            window.sessionInterval = setInterval(() => {
+                const remaining = state.endTime - Date.now();
+                
+                if (remaining <= 0) {
+                    clearInterval(window.sessionInterval);
+                    finishSession(state.durationMins);
+                } else {
+                    const timeStr = formatTime(remaining / 1000);
+                    document.getElementById('timerClock').textContent = timeStr;
+                    // Also update the menu timer if it exists on this page
+                    if (document.getElementById('menuTimerClock')) {
+                        document.getElementById('menuTimerClock').textContent = timeStr;
+                    }
+                }
+            }, 1000);
+        };
+
+        const finishSession = (mins) => {
+            localStorage.removeItem(SESSION_STATE_KEY);
+            
+            // Update the "Database"
+            Session.saveSessionStats(mins);
+            
+            // Play a gentle alert if you have one, or just the modal
+            alert("Congratulations Session Completed! Your session has finished. Take some time to gather yourself, you're ready for whatever the rest of the day brings.");
+            
+            // Refresh UI to show updated stats in the right-side frame
+            updateStatsDisplay();
+            updateTimerUI();
+        };
+
+        const updateStatsDisplay = () => {
+            const user = Session.getCurrentUser();
+            if (user && user.stats) {
+                document.getElementById('statSessions').textContent = user.stats.totalSessions || 0;
+                document.getElementById('statHours').textContent = (user.stats.totalMinutes / 60).toFixed(1) || "0.0";
+            }
+        };
+
+        // Call on load
+        updateStatsDisplay();
+        updateTimerUI();
+
+        // Listen for duration clicks
+        document.querySelectorAll('.btn-duration').forEach(btn => {
+            btn.addEventListener('click', () => startSessionTimer(btn.dataset.mins));
+        });
+
+        wavesurfer.load(trackPath);
+
+        // 2. Play/Pause & Media Session API
+        const btn = document.getElementById('playPauseBtn');
+        const icon = document.getElementById('playIcon');
+
+        const togglePlay = () => {
+            wavesurfer.playPause();
+            const isPlaying = wavesurfer.isPlaying();
+            
+            // UI Toggle
+            icon.className = isPlaying ? 'bi bi-pause-fill fs-2' : 'bi bi-play-fill fs-2';
+            btn.classList.toggle('btn-pulse', !isPlaying);
+
+            // Media Session API (Bluetooth Controls)
+            if ('mediaSession' in navigator) {
+                navigator.mediaSession.playbackState = isPlaying ? 'playing' : 'paused';
+            }
+        };
+
+        btn.addEventListener('click', togglePlay);
+
+        // Setup Media Session metadata
+        wavesurfer.on('ready', () => {
+            if ('mediaSession' in navigator) {
+                navigator.mediaSession.metadata = new MediaMetadata({
+                    title: document.getElementById('trackTitle').textContent,
+                    artist: 'PRESSUR™',
+                    album: category,
+                    artwork: [{ src: 'assets/img/logo.png', sizes: '512x512', type: 'image/png' }]
+                });
+                
+                navigator.mediaSession.setActionHandler('play', togglePlay);
+                navigator.mediaSession.setActionHandler('pause', togglePlay);
+            }
+        });
+
+        // Volume Control
+        document.getElementById('volumeSlider').addEventListener('input', (e) => {
+            wavesurfer.setVolume(e.target.value);
+        });
+        
+        // Menu
+        // 1. Set Welcome Name
+        const user = Session.getCurrentUser();
+        if (user) {
+            document.getElementById('menuWelcome').textContent = `Welcome, ${user.name}`;
         }
-    </script>
+
+        // 2. Highlight Active Page
+        const currentPage = window.location.pathname.split("/").pop() || 'index.html';
+        if (currentPage === 'categories.html') document.getElementById('nav-categories').classList.add('active-page');
+        if (currentPage === 'session.html') document.getElementById('nav-session').classList.add('active-page');
+
+        // 3. Persistent Menu Timer
+        const updateMenuTimer = () => {
+            if (!user) return;
+            const state = JSON.parse(localStorage.getItem(`pressur_active_session_${user.id}`));
+            const timerSection = document.getElementById('menuTimerSection');
+            const timerClock = document.getElementById('menuTimerClock');
+
+            if (state && state.isActive) {
+                timerSection.classList.remove('d-none');
+                const remaining = state.endTime - Date.now();
+                if (remaining > 0) {
+                    const mins = Math.floor(remaining / 1000 / 60);
+                    const secs = Math.floor((remaining / 1000) % 60);
+                    timerClock.textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+                } else {
+                    timerSection.classList.add('d-none'); // Hide when done
+                }
+            } else {
+                timerSection.classList.add('d-none');
+            }
+        };
+
+        // Run timer update every second
+        setInterval(updateMenuTimer, 1000);
+        updateMenuTimer();
+        
+        // Favourite
+        const favBtn = document.getElementById('favBtn');
+        const trackFilename = decodeURIComponent(urlParams.get('track')).split('/').pop();
+
+        // Initial State Check
+        const updateFavUI = (isFav) => {
+            favBtn.innerHTML = isFav ? '<i class="bi bi-star-fill me-2 text-warning"></i>Favorited' : '<i class="bi bi-star me-2"></i>Add to Favorites';
+            favBtn.classList.toggle('border-warning', isFav);
+        };
+
+        updateFavUI(Session.isFavorite(trackFilename));
+
+        // Click Event
+        favBtn.addEventListener('click', () => {
+            const newState = Session.toggleFavorite(trackFilename);
+            updateFavUI(newState);
+        });
+    });
+
+    function toggleFullScreen() {
+        const elem = document.getElementById('playerFrame');
+        if (!document.fullscreenElement) {
+            elem.requestFullscreen().catch(err => {
+                alert(`Error attempting to enable full-screen mode: ${err.message}`);
+            });
+        } else {
+            document.exitFullscreen();
+        }
+    }
+</script>
 </body>
 </html>
