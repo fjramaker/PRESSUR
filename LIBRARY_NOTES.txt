@@ -1,0 +1,22 @@
+PRESSUR™ LIBRARY MANAGEMENT NOTES
+==================================
+
+1. COMPRESSION (CRITICAL)
+- All tracks must stay under 20MB to maintain Netlify Free Tier.
+- Process: Use 'https://www.onlineconverter.com/compress-mp3' before uploading.
+
+2. NAMING CONVENTION
+- Format: [Index].[Description]_[Subtitle]_[Quality].mp3
+- Rule: Use UNDERSCORES (_) for spaces you want to see in the app.
+- Rule: Use HYPHENS (-) for technical labels (e.g., 4-7hz) you want to keep together.
+- Example: "6.pure_theta_4-7hz_piano_compr.mp3" 
+  -> Displays as: "Pure Theta 4-7hz Piano"
+
+3. ADDING A TRACK
+- Step A: Upload compressed .mp3 to /assets/audio/
+- Step B: Open /js/library.json
+- Step C: Add the exact filename to the appropriate category array.
+
+4. CATEGORIES
+- To add a new category (e.g., "Recovery"), add a new key-value pair in library.json.
+- The UI will automatically generate a new accordion section for it.
