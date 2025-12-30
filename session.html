@@ -46,6 +46,10 @@
             width: 150px;
             accent-color: var(--accent-start);
         }
+        
+        /* Navbar tweaks */
+        .navbar { background: transparent; padding: 20px; }
+        .offcanvas { background-color: var(--bg-dark); border-left: 1px solid var(--border-color); color: white; }
     </style>
 </head>
 
@@ -220,8 +224,8 @@
             progressColor: '#00c6ff',
             cursorColor: '#ffffff',
             barWidth: 3,
-            barGap: 3,
-            height: 120, // Reduced to leave room for stamps
+            barGap: 2,
+            height: 160, // Reduced to leave room for stamps
             minPxPerSec: 30, // Higher number = more zoomed in/scrolling
             autoCenter: true,
             interact: true,
