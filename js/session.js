@@ -38,8 +38,9 @@ const Session = {
         const path = window.location.pathname;
         const page = path.split("/").pop(); // Get filename (e.g., 'index.html')
 
-        // List of pages that require login
-        const protectedPages = ['categories.html', 'session.html'];
+        // categories.html now also contains the player + science views (single page).
+        // session.html is kept only as a redirect stub for old links.
+        const protectedPages = ['categories.html', 'settings.html'];
 
         // 1. If on a protected page and NOT logged in -> Go to Login
         if (protectedPages.includes(page) && !currentUser) {
@@ -51,19 +52,19 @@ const Session = {
             window.location.href = 'categories.html';
         }
     },
-    
+
     toggleFavorite: (trackId) => {
         const users = JSON.parse(localStorage.getItem(USERS_KEY));
         const currentUser = Session.getCurrentUser();
         const userIndex = users.findIndex(u => u.id === currentUser.id);
-        
+
         const favIndex = users[userIndex].favorites.indexOf(trackId);
         if (favIndex > -1) {
             users[userIndex].favorites.splice(favIndex, 1); // Remove if exists
         } else {
             users[userIndex].favorites.push(trackId); // Add if not
         }
-        
+
         // Update both DB and current session
         localStorage.setItem(USERS_KEY, JSON.stringify(users));
         localStorage.setItem(SESSION_KEY, JSON.stringify(users[userIndex]));
@@ -74,21 +75,26 @@ const Session = {
         const user = Session.getCurrentUser();
         return user && user.favorites ? user.favorites.includes(trackId) : false;
     },
-    
+
+    // Records one completed session. Keeps a short dated history (not just a running
+    // total) so the weekly graph on the Session Complete / Settings screens has something
+    // real to draw from. History is capped at 90 entries so it can't grow forever.
     saveSessionStats: (mins) => {
         const users = JSON.parse(localStorage.getItem(USERS_KEY));
         const currentUser = Session.getCurrentUser();
         const userIndex = users.findIndex(u => u.id === currentUser.id);
+        const user = users[userIndex];
 
-        // Update stats
-        users[userIndex].stats.totalSessions += 1;
-        users[userIndex].stats.totalMinutes = (users[userIndex].stats.totalMinutes || 0) + mins;
-        
-        // Convert minutes to hours for the display
-        users[userIndex].stats.totalHours = (users[userIndex].stats.totalMinutes / 60).toFixed(1);
+        user.stats.totalSessions = (user.stats.totalSessions || 0) + 1;
+        user.stats.totalMinutes = (user.stats.totalMinutes || 0) + Number(mins);
+        user.stats.totalHours = (user.stats.totalMinutes / 60).toFixed(1);
+
+        if (!Array.isArray(user.stats.history)) user.stats.history = [];
+        user.stats.history.push({ date: new Date().toISOString().slice(0, 10), mins: Number(mins) });
+        if (user.stats.history.length > 90) user.stats.history = user.stats.history.slice(-90);
 
         localStorage.setItem(USERS_KEY, JSON.stringify(users));
-        localStorage.setItem(SESSION_KEY, JSON.stringify(users[userIndex]));
+        localStorage.setItem(SESSION_KEY, JSON.stringify(user));
     }
 };
 

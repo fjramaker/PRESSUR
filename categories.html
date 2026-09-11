@@ -3,9 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Categories - PRESSUR™</title>
-    
+    <title>PRESSUR™ AWT™</title>
     <link rel="icon" type="image/png" href="assets/img/logo.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
@@ -13,225 +16,502 @@
     <script src="js/session.js"></script>
 
     <style>
-        .category-card {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 15px;
-            transition: transform 0.2s;
+        #playerFrame { position: relative; }
+        .science-card { background: rgba(167,139,250,.06); border: 1px solid rgba(167,139,250,.15); border-radius: 16px; padding: 24px; }
+        .science-card h4 { font-size: 14px; font-weight: 700; color: var(--purple); margin-bottom: 8px; }
+        .science-card p { font-size: 13px; line-height: 1.6; color: var(--muted); }
+        .science-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+        .how-step { display: flex; gap: 16px; margin-bottom: 24px; }
+        .step-num {
+            flex-shrink: 0; width: 32px; height: 32px; border-radius: 50%;
+            background: var(--surface-2); border: 1px solid var(--line);
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; color: var(--cyan); font-size: 13px;
         }
-        .accordion-button {
-            background-color: transparent !important;
-            color: white !important;
-            box-shadow: none !important;
-        }
-        .accordion-button:not(.collapsed) {
-            border-bottom: 1px solid var(--border-color);
-        }
-        .accordion-item {
-            background-color: transparent;
-            border: none;
-        }
-        .hz-badge {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 2px 10px;
-            border-radius: 10px;
-            font-size: 0.8rem;
-        }
-        .track-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
-        .track-item:last-child { border-bottom: none; }
-        
-        /* Navbar tweaks */
-        .navbar { background: transparent; padding: 20px; }
-        .offcanvas { background-color: var(--bg-dark); border-left: 1px solid var(--border-color); color: white; }
+        .nav-item-disabled { opacity: .4; pointer-events: none; }
     </style>
 </head>
 <body>
 
 <nav class="navbar navbar-dark">
     <div class="container-fluid">
-        <span class="navbar-brand fw-bold title-gradient">PRESSUR™</span>
+        <a href="#" onclick="showView('protocol'); return false;" class="navbar-brand d-flex align-items-center gap-2 text-decoration-none">
+            <img src="assets/img/logo.png" alt="" style="width:28px;height:28px">
+            <span class="fw-bold text-gradient">PRESSUR™</span>
+        </a>
         <button class="navbar-toggler border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#navMenu">
-            <i class="bi bi-list fs-1"></i>
+            <i class="bi bi-list fs-1" style="color:var(--text)"></i>
         </button>
     </div>
 </nav>
 
 <div class="offcanvas offcanvas-end" tabindex="-1" id="navMenu">
-    <div class="offcanvas-header border-bottom border-secondary border-opacity-25">
+    <div class="offcanvas-header border-bottom" style="border-color:var(--line) !important">
         <h5 class="offcanvas-title fw-light" id="menuWelcome">Menu</h5>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
     </div>
     <div class="offcanvas-body d-flex flex-column">
         <ul class="nav flex-column mb-auto">
             <li class="nav-item mb-2">
-                <a class="nav-link text-white rounded nav-link-custom" id="nav-categories" href="categories.html">
-                    <i class="bi bi-grid-fill me-2"></i> Categories
+                <a class="nav-link rounded nav-link-custom active-page" style="color:var(--text)" id="nav-protocol"
+                   href="#" onclick="showView('protocol'); return false;" data-bs-dismiss="offcanvas">
+                    <i class="bi bi-grid-fill me-2"></i> Protocols
                 </a>
             </li>
             <li class="nav-item mb-2">
-                <a class="nav-link text-white rounded nav-link-custom" id="nav-session" href="session.html">
-                    <i class="bi bi-play-circle me-2"></i> Current Session
+                <a class="nav-link rounded nav-link-custom nav-item-disabled" style="color:var(--text)" id="nav-active"
+                   href="#" onclick="showView('active'); return false;" data-bs-dismiss="offcanvas">
+                    <i class="bi bi-play-circle me-2"></i> Current session
                 </a>
             </li>
             <li class="nav-item mb-2">
-                <a class="nav-link text-white rounded nav-link-custom" id="nav-analytics" href="#">
-                    <i class="bi bi-graph-up me-2"></i> Analytics
+                <a class="nav-link rounded nav-link-custom" style="color:var(--text)" id="nav-science"
+                   href="#" onclick="showView('science'); return false;" data-bs-dismiss="offcanvas">
+                    <i class="bi bi-book me-2"></i> Science &amp; About
                 </a>
             </li>
-            <hr class="border-secondary opacity-25">
+            <li class="nav-item mb-2">
+                <a class="nav-link" style="color:var(--text)" href="settings.html">
+                    <i class="bi bi-person-circle me-2"></i> Settings
+                </a>
+            </li>
+            <li class="nav-item mb-2">
+                <span class="nav-link d-flex align-items-center" style="color:var(--dim); cursor:default">
+                    <i class="bi bi-graph-up me-2"></i> Analytics <span class="nav-soon">Soon</span>
+                </span>
+            </li>
+            <hr style="border-color:var(--line)">
             <li class="nav-item">
                 <a class="nav-link text-danger" href="#" onclick="Session.logout()">
-                    <i class="bi bi-box-arrow-right me-2"></i> Finish Session
+                    <i class="bi bi-box-arrow-right me-2"></i> Finish session
                 </a>
             </li>
         </ul>
 
-        <div id="menuTimerSection" class="d-none mt-auto pt-4 border-top border-secondary border-opacity-25 text-center">
-            <p class="x-small text-uppercase ls-1 text-light mb-1">Chamber Session</p>
+        <div id="menuTimerSection" class="d-none mt-auto pt-4 border-top text-center" style="border-color:var(--line) !important">
+            <p class="x-small text-uppercase ls-1 mb-1" style="color:var(--muted)">Chamber session</p>
             <div class="h3 fw-bold text-gradient mb-0" id="menuTimerClock">00:00</div>
-            <p class="x-small text-light">remaining</p>
+            <p class="x-small" style="color:var(--muted)">remaining</p>
         </div>
     </div>
 </div>
 
-<div class="container py-4">
-    <div class="row mb-4">
-        <div class="col">
-            <h2 class="fw-bold">Select Therapy</h2>
-            <p class="text-secondary-light">Choose a category to explore acoustic recovery sessions.</p>
-        </div>
-    </div>
+<main class="container py-4">
 
-    <div id="categories-container" class="row row-cols-1 row-cols-lg-2 g-4">
-        <div class="col-12 text-center py-5">
-            <div class="spinner-border text-primary" role="status"></div>
+    <section id="view-protocol" class="view active">
+        <div class="mb-4">
+            <div class="eyebrow mb-2">The Protocols</div>
+            <h2 class="fw-bold mb-2">Four states. One system.</h2>
+            <p class="text-secondary-light">Each protocol shifts your nervous system into a specific recovery state, on demand.</p>
         </div>
-    </div>
-</div>
+        <div id="protocols-container" class="protocols-grid">
+            <div class="text-center py-5" style="grid-column:1/-1">
+                <div class="spinner-border" style="color:var(--cyan)" role="status"></div>
+            </div>
+        </div>
+    </section>
 
+    <section id="view-active" class="view d-flex flex-column align-items-center">
+        <div class="session-frame p-4 mb-4 shadow-lg" id="playerFrame">
+
+            <div class="d-flex justify-content-between align-items-start mb-3">
+                <div>
+                    <div class="eyebrow mb-1" id="sessionProtocolLabel">Protocol</div>
+                    <h2 id="sessionCategory" class="fw-bold mb-0" style="font-size:1.4rem;color:var(--text)">—</h2>
+                    <p id="trackTitle" class="fw-light mb-0" style="color:var(--muted);font-size:.9rem">—</p>
+                </div>
+                <button class="btn btn-link p-0" style="color:var(--muted)" onclick="toggleFullScreen()">
+                    <i class="bi bi-arrows-fullscreen"></i>
+                </button>
+            </div>
+
+            <div class="session-progress"><div class="session-progress-fill" id="sessionProgressFill"></div></div>
+            <div id="waveform" class="mb-2"></div>
+
+            <div class="d-flex justify-content-between px-1 mb-3" style="font-size:.85rem;font-family:monospace;color:var(--muted)">
+                <span id="currentTime">00:00</span>
+                <span id="totalDuration">00:00</span>
+            </div>
+
+            <div class="row align-items-center">
+                <div class="col-4">
+                    <button class="btn btn-sm rounded-pill border-0" id="favBtn" style="background:rgba(255,255,255,.05);color:var(--muted)">
+                        <i class="bi bi-star me-2"></i>Favorite
+                    </button>
+                </div>
+                <div class="col-4 text-center">
+                    <button id="playPauseBtn" class="btn btn-gradient rounded-circle mx-auto d-flex align-items-center justify-content-center btn-pulse" style="width:60px;height:60px">
+                        <i class="bi bi-play-fill fs-2" id="playIcon"></i>
+                    </button>
+                </div>
+                <div class="col-4 d-flex justify-content-end align-items-center">
+                    <i class="bi bi-volume-down-fill me-2" style="color:var(--dim)"></i>
+                    <input type="range" class="volume-slider" id="volumeSlider" min="0" max="1" step="0.05" value="0.5">
+                </div>
+            </div>
+
+            <div class="session-complete-overlay" id="sessionCompleteOverlay">
+                <div class="session-complete-panel">
+                    <div id="sessionCompleteStats"></div>
+                    <div class="d-grid mt-3">
+                        <button class="btn btn-gradient" onclick="dismissSessionComplete()">Back to protocols</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="session-frame p-3 mb-4 d-flex justify-content-between align-items-center px-4" style="max-width:900px;width:100%">
+            <div class="d-flex align-items-center">
+                <i class="bi bi-heart-fill text-danger me-3 fs-4 pulse-slow"></i>
+                <div>
+                    <span class="text-uppercase fw-bold ls-1 small d-block">Heart rate</span>
+                    <span class="x-small" style="color:var(--dim)">Estimated · pair a sensor for live data</span>
+                </div>
+            </div>
+            <div class="h3 mb-0 fw-bold"><span id="bpmVal">72</span> <small class="fs-6" style="color:var(--muted)">BPM</small></div>
+        </div>
+
+        <div class="row" style="max-width:900px;width:100%">
+            <div class="col-md-6 ps-0 pe-2">
+                <div class="session-frame p-4 h-100">
+                    <h6 class="text-uppercase ls-1 mb-3 small eyebrow"><i class="bi bi-clock-history me-2"></i>Session duration</h6>
+                    <div id="durationButtons">
+                        <div class="row g-2">
+                            <div class="col-6"><button class="btn btn-ghost w-100 py-2 btn-duration" data-mins="15">15m</button></div>
+                            <div class="col-6"><button class="btn btn-ghost w-100 py-2 btn-duration" data-mins="30">30m</button></div>
+                            <div class="col-6"><button class="btn btn-ghost w-100 py-2 btn-duration" data-mins="45">45m</button></div>
+                            <div class="col-6"><button class="btn btn-ghost w-100 py-2 btn-duration" data-mins="60">60m</button></div>
+                        </div>
+                    </div>
+                    <div id="activeTimerDisplay" class="d-none text-center py-3">
+                        <div class="display-6 fw-bold text-gradient" id="timerClock">00:00</div>
+                        <p class="small mt-2" style="color:var(--muted)">Remaining in session</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 pe-0 ps-2">
+                <div class="session-frame p-4 h-100">
+                    <div class="opacity-50">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <div><h6 class="mb-0 small fw-bold">Biometric adaptation</h6><p class="x-small mb-0" style="color:var(--muted)">Auto-adjust intensity</p></div>
+                            <div class="form-check form-switch"><input class="form-check-input" type="checkbox" disabled></div>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div><h6 class="mb-0 small fw-bold">PRESSUR™ Sync</h6><p class="x-small mb-0" style="color:var(--muted)">Sync chamber lighting</p></div>
+                            <div class="form-check form-switch"><input class="form-check-input" type="checkbox" disabled></div>
+                        </div>
+                        <button class="btn btn-sm w-100" style="background:rgba(255,255,255,.04);color:var(--muted)"><i class="bi bi-download me-2"></i>Download for offline</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="view-science" class="view">
+        <div class="eyebrow mb-2">The Research</div>
+        <h2 class="fw-bold mb-3" style="max-width:600px">Backed by <span class="text-gradient">published science.</span></h2>
+        <p class="text-secondary-light mb-5" style="max-width:540px">AWT™ is grounded in peer-reviewed research across four fields of neuroscience and autonomic physiology.</p>
+
+        <h5 class="fw-bold mb-4">How it works</h5>
+        <div class="how-step">
+            <div class="step-num">1</div>
+            <div><h6 class="fw-bold mb-1">Sound enters the auditory system</h6><p class="text-secondary-light small mb-0">Low-frequency acoustic signals are processed by the brainstem and vagus nerve simultaneously.</p></div>
+        </div>
+        <div class="how-step">
+            <div class="step-num">2</div>
+            <div><h6 class="fw-bold mb-1">Vagal pathways are stimulated</h6><p class="text-secondary-light small mb-0">Specific frequencies activate the vagus nerve — the primary highway of parasympathetic communication between brain and body.</p></div>
+        </div>
+        <div class="how-step">
+            <div class="step-num">3</div>
+            <div><h6 class="fw-bold mb-1">Autonomic state shifts</h6><p class="text-secondary-light small mb-0">Heart rate variability improves, cortisol reduces, and the body shifts from stress response to recovery mode.</p></div>
+        </div>
+        <div class="how-step mb-5">
+            <div class="step-num">4</div>
+            <div><h6 class="fw-bold mb-1">CNS reset complete</h6><p class="text-secondary-light small mb-0">In 15–60 minutes, your nervous system has been guided through a complete autonomic reset.</p></div>
+        </div>
+
+        <h5 class="fw-bold mb-4">The research</h5>
+        <div class="science-grid mb-3">
+            <div class="science-card">
+                <h4>Auditory Vagal Stimulation</h4>
+                <p>Sound-based signals activate vagal afferents — triggering parasympathetic responses that reduce sympathetic load and improve HRV.</p>
+                <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7862430/" target="_blank" rel="noopener" style="font-size:11px;color:var(--cyan)">PMC7862430 — Frontiers in Neuroscience</a>
+            </div>
+            <div class="science-card">
+                <h4>Low Frequency Entrainment</h4>
+                <p>The brain synchronises its electrical activity to external rhythmic stimuli — shifting dominant brainwave states toward recovery-optimised frequencies.</p>
+                <a href="https://pubmed.ncbi.nlm.nih.gov/3223367" target="_blank" rel="noopener" style="font-size:11px;color:var(--cyan)">PubMed 3223367 — Low Frequency Entrainment</a>
+            </div>
+            <div class="science-card">
+                <h4>Vibroacoustic Recovery</h4>
+                <p>Low-frequency sound waves applied to the body reduce muscle tension, improve circulation, and accelerate tissue recovery at a cellular level.</p>
+                <a href="https://pubmed.ncbi.nlm.nih.gov/23541122/" target="_blank" rel="noopener" style="font-size:11px;color:var(--cyan)">PubMed 23541122 — Vibroacoustic Therapy</a>
+            </div>
+            <div class="science-card">
+                <h4>HRV &amp; Autonomic Regulation</h4>
+                <p>Acoustic protocols measurably improve heart rate variability — the most reliable indicator of CNS recovery and readiness.</p>
+                <a href="https://www.frontiersin.org/articles/10.3389/fnins.2017.00614/full" target="_blank" rel="noopener" style="font-size:11px;color:var(--cyan)">Frontiers in Neuroscience — HRV &amp; Autonomic Regulation</a>
+            </div>
+        </div>
+        <p class="x-small" style="color:var(--dim)">All sources are peer-reviewed and publicly accessible. Click any reference to read the original study.</p>
+    </section>
+
+</main>
+
+<script src="https://unpkg.com/wavesurfer.js@7"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="js/protocols.js"></script>
+<script src="js/stats.js"></script>
 
 <script>
+    let wavesurfer;
+    let library = {};
+    let hasActiveTrack = false;
+    let currentProtocolColor = '#36d1ff';
+
     document.addEventListener('DOMContentLoaded', () => {
-        fetch('library.json')
-            .then(response => response.json())
-            .then(data => renderCategories(data))
-            .catch(error => console.error('Error loading library:', error));
-        // 1. Set Welcome Name
         const user = Session.getCurrentUser();
-        if (user) {
-            document.getElementById('menuWelcome').textContent = `Welcome, ${user.name}`;
-        }
+        if (user) document.getElementById('menuWelcome').textContent = `Welcome, ${user.name}`;
 
-        // 2. Highlight Active Page
-        const currentPage = window.location.pathname.split("/").pop() || 'index.html';
-        if (currentPage === 'categories.html') document.getElementById('nav-categories').classList.add('active-page');
-        if (currentPage === 'session.html') document.getElementById('nav-session').classList.add('active-page');
+        fetch('library.json')
+            .then(r => r.json())
+            .then(data => { library = data; renderProtocols(data); })
+            .catch(err => console.error('Error loading library:', err));
 
-        // 3. Persistent Menu Timer
-        const updateMenuTimer = () => {
-            if (!user) return;
-            const state = JSON.parse(localStorage.getItem(`pressur_active_session_${user.id}`));
-            const timerSection = document.getElementById('menuTimerSection');
-            const timerClock = document.getElementById('menuTimerClock');
-
-            if (state && state.isActive) {
-                timerSection.classList.remove('d-none');
-                const remaining = state.endTime - Date.now();
-                if (remaining > 0) {
-                    const mins = Math.floor(remaining / 1000 / 60);
-                    const secs = Math.floor((remaining / 1000) % 60);
-                    timerClock.textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-                } else {
-                    timerSection.classList.add('d-none'); // Hide when done
-                }
-            } else {
-                timerSection.classList.add('d-none');
-            }
-        };
-
-        // Run timer update every second
-        setInterval(updateMenuTimer, 1000);
+        initPlayer();
         updateMenuTimer();
+        setInterval(updateMenuTimer, 1000);
     });
 
-    function renderCategories(library) {
-        const container = document.getElementById('categories-container');
-        container.innerHTML = ''; // Clear spinner
+    // ---------- View switching (this is the whole point of the SPA — the wavesurfer
+    // instance below is created once and lives in the DOM regardless of which view
+    // is visible, so audio never stops when the user looks at another screen) ----------
+    function showView(name) {
+        document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+        document.getElementById('view-' + name).classList.add('active');
+        document.querySelectorAll('.nav-link-custom').forEach(l => l.classList.remove('active-page'));
+        const navEl = document.getElementById('nav-' + name);
+        if (navEl) navEl.classList.add('active-page');
+    }
 
-        // Map through keys (healing, meditation, etc.)
-        Object.keys(library).forEach((key, index) => {
-            const cat = library[key];
-            const accordionId = `acc-${index}`;
-            
-            const cardHtml = `
-                <div class="col">
-                    <div class="category-card">
-                        <div class="accordion" id="parent-${accordionId}">
-                            <div class="accordion-item">
-                                <h2 class="accordion-header">
-                                    <button class="accordion-button collapsed p-4" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-${accordionId}">
-                                        <div class="d-flex align-items-center w-100">
-                                            <i class="bi ${cat.icon} fs-1 me-4 text-info"></i>
-                                            <div class="flex-grow-1 text-start">
-                                                <div class="d-flex justify-content-between align-items-center mb-1">
-                                                    <span class="text-uppercase fw-bold ls-1">${key}</span>
-                                                    <span class="hz-badge text-muted">${cat.hz} Hz</span>
-                                                </div>
-                                                <p class="small text-light m-0 pe-3">${cat.description}</p>
-                                            </div>
-                                        </div>
-                                    </button>
-                                </h2>
-                                <div id="collapse-${accordionId}" class="accordion-collapse collapse" data-bs-parent="#parent-${accordionId}">
-                                    <div class="accordion-body p-0">
-                                        ${cat.tracks.map(track => renderTrackItem(track, key)).join('')}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+    // ---------- Protocol Selection ----------
+    function renderProtocols(lib) {
+        const container = document.getElementById('protocols-container');
+        container.innerHTML = '';
+
+        Object.keys(lib).forEach((key) => {
+            const cat = lib[key];
+            const meta = getProtocolMeta(cat.benefit);
+            const collapseId = 'collapse-' + key.replace(/\s+/g, '-');
+
+            container.innerHTML += `
+                <div class="protocol-card" style="--pc:${meta.color}">
+                    <div class="protocol-num">Protocol ${meta.number}</div>
+                    <div class="protocol-icon">${meta.icon}</div>
+                    <h3>${cat.benefit}</h3>
+                    <p>${cat.description}</p>
+                    <div class="d-flex justify-content-between align-items-center protocol-toggle" role="button"
+                         data-bs-toggle="collapse" data-bs-target="#${collapseId}" aria-expanded="false">
+                        <span class="x-small text-uppercase ls-1" style="color:var(--muted)">${cat.tracks.length} tracks</span>
+                        <i class="bi bi-chevron-down chev"></i>
+                    </div>
+                    <div class="collapse" id="${collapseId}">
+                        ${cat.tracks.map(t => renderTrackRow(t, key)).join('')}
                     </div>
                 </div>
             `;
-            container.innerHTML += cardHtml;
         });
     }
 
-    function renderTrackItem(filename, category) {
-        const displayTitle = filename
-            .replace(/^\d+\./, '')                    // Remove "6."
-            .replace(/-compr\.mp3$/, '')              // Remove suffix
-            .replace(/_/g, ' ')                       // Replace ONLY underscores with spaces
-            .replace(/\b\w/g, l => l.toUpperCase());  // Capitalize
-
-        const filePath = encodeURIComponent(`assets/audio/${filename}`);
-        
-        // Check if favorited using our new helper
+    function renderTrackRow(filename, categoryKey) {
+        const displayTitle = filename.replace(/^\d+\./, '').replace(/-compr\.mp3$/, '').replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
         const isFav = Session.isFavorite(filename);
-        const starIcon = isFav ? 'bi-star-fill text-warning' : 'bi-star';
-
         return `
-            <div class="track-item">
-                <div class="d-flex align-items-center">
-                    <i class="bi bi-play-fill fs-4 me-3 text-white-50"></i>
-                    <span>${displayTitle}</span>
-                </div>
-                <div class="d-flex align-items-center">
-                    <div class="me-3">
-                        <i class="bi ${starIcon}"></i>
-                    </div>
-                    <a href="session.html?track=${filePath}&cat=${category}" class="btn btn-sm btn-gradient px-3 rounded-pill">
-                        Start
-                    </a>
+            <div class="track-row">
+                <span style="font-size:14px;color:var(--text)">${displayTitle}</span>
+                <div class="d-flex align-items-center gap-3">
+                    <i class="bi ${isFav ? 'bi-star-fill' : 'bi-star'}" style="color:${isFav ? 'var(--pc)' : 'var(--muted)'}"></i>
+                    <button class="btn btn-sm btn-gradient px-3 rounded-pill" onclick="startTrack('${filename}', '${categoryKey}')">Start</button>
                 </div>
             </div>
         `;
+    }
+
+    // ---------- Active session / player ----------
+    function formatTime(seconds) {
+        const mins = Math.floor(seconds / 60);
+        const secs = Math.floor(seconds % 60);
+        return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    }
+
+    function initPlayer() {
+        wavesurfer = WaveSurfer.create({
+            container: '#waveform',
+            waveColor: 'rgba(148, 161, 196, 0.35)',
+            progressColor: currentProtocolColor,
+            cursorColor: '#f3f6fc',
+            barWidth: 3,
+            barGap: 2,
+            height: 160,
+            minPxPerSec: 30,
+            autoCenter: true,
+            interact: true,
+            fillParent: true
+        });
+
+        wavesurfer.on('audioprocess', (time) => {
+            document.getElementById('currentTime').textContent = formatTime(time);
+            const dur = wavesurfer.getDuration();
+            if (dur) document.getElementById('sessionProgressFill').style.width = `${(time / dur) * 100}%`;
+        });
+        wavesurfer.on('ready', () => {
+            document.getElementById('totalDuration').textContent = formatTime(wavesurfer.getDuration());
+            if ('mediaSession' in navigator) {
+                navigator.mediaSession.metadata = new MediaMetadata({
+                    title: document.getElementById('trackTitle').textContent,
+                    artist: 'PRESSUR™ AWT™',
+                    album: document.getElementById('sessionCategory').textContent,
+                    artwork: [{ src: 'assets/img/logo.png', sizes: '512x512', type: 'image/png' }]
+                });
+                navigator.mediaSession.setActionHandler('play', togglePlay);
+                navigator.mediaSession.setActionHandler('pause', togglePlay);
+            }
+        });
+
+        document.getElementById('playPauseBtn').addEventListener('click', togglePlay);
+        document.getElementById('volumeSlider').addEventListener('input', (e) => wavesurfer.setVolume(e.target.value));
+
+        // Simulated placeholder until a real sensor is wired in (see plan notes)
+        setInterval(() => {
+            document.getElementById('bpmVal').textContent = 72 + Math.floor(Math.random() * 5) - 2;
+        }, 3000);
+
+        document.querySelectorAll('.btn-duration').forEach(btn => {
+            btn.addEventListener('click', () => startSessionTimer(btn.dataset.mins));
+        });
+
+        updateTimerUI();
+        updateFavButtonForCurrentTrack();
+    }
+
+    function togglePlay() {
+        wavesurfer.playPause();
+        const isPlaying = wavesurfer.isPlaying();
+        document.getElementById('playIcon').className = isPlaying ? 'bi bi-pause-fill fs-2' : 'bi bi-play-fill fs-2';
+        document.getElementById('playPauseBtn').classList.toggle('btn-pulse', !isPlaying);
+        if ('mediaSession' in navigator) navigator.mediaSession.playbackState = isPlaying ? 'playing' : 'paused';
+    }
+
+    let currentTrackFilename = null;
+
+    function startTrack(filename, categoryKey) {
+        const cat = library[categoryKey];
+        const meta = getProtocolMeta(cat.benefit);
+
+        currentTrackFilename = filename;
+        currentProtocolColor = meta.color;
+        wavesurfer.setOptions({ progressColor: meta.color });
+
+        document.getElementById('sessionProtocolLabel').textContent = `Protocol ${meta.number}`;
+        document.getElementById('sessionProtocolLabel').style.color = meta.color;
+        document.getElementById('sessionCategory').textContent = cat.benefit;
+        document.getElementById('trackTitle').textContent = filename.replace(/^\d+\./, '').replace(/-compr\.mp3$/, '').replace(/_/g, ' ');
+
+        wavesurfer.load(`assets/audio/${filename}`);
+        updateFavButtonForCurrentTrack();
+
+        document.getElementById('nav-active').classList.remove('nav-item-disabled');
+        hasActiveTrack = true;
+        showView('active');
+    }
+
+    function updateFavButtonForCurrentTrack() {
+        const favBtn = document.getElementById('favBtn');
+        if (!currentTrackFilename) return;
+        const isFav = Session.isFavorite(currentTrackFilename);
+        favBtn.innerHTML = isFav ? '<i class="bi bi-star-fill me-2"></i>Favorited' : '<i class="bi bi-star me-2"></i>Favorite';
+        favBtn.style.color = isFav ? currentProtocolColor : 'var(--muted)';
+    }
+
+    document.getElementById('favBtn').addEventListener('click', () => {
+        if (!currentTrackFilename) return;
+        Session.toggleFavorite(currentTrackFilename);
+        updateFavButtonForCurrentTrack();
+    });
+
+    // ---------- Session timer (localStorage-backed so a hard refresh doesn't lose it) ----------
+    function getSessionStateKey() {
+        const user = Session.getCurrentUser();
+        return `pressur_active_session_${user.id}`;
+    }
+
+    function startSessionTimer(minutes) {
+        const endTime = Date.now() + minutes * 60 * 1000;
+        localStorage.setItem(getSessionStateKey(), JSON.stringify({ endTime, durationMins: parseInt(minutes), isActive: true }));
+        updateTimerUI();
+    }
+
+    function updateTimerUI() {
+        const state = JSON.parse(localStorage.getItem(getSessionStateKey()) || 'null');
+        if (!state || !state.isActive) {
+            document.getElementById('durationButtons').classList.remove('d-none');
+            document.getElementById('activeTimerDisplay').classList.add('d-none');
+            return;
+        }
+        document.getElementById('durationButtons').classList.add('d-none');
+        document.getElementById('activeTimerDisplay').classList.remove('d-none');
+
+        if (window.sessionInterval) clearInterval(window.sessionInterval);
+        window.sessionInterval = setInterval(() => {
+            const remaining = state.endTime - Date.now();
+            if (remaining <= 0) {
+                clearInterval(window.sessionInterval);
+                finishSession(state.durationMins);
+            } else {
+                document.getElementById('timerClock').textContent = formatTime(remaining / 1000);
+            }
+        }, 1000);
+    }
+
+    function finishSession(mins) {
+        localStorage.removeItem(getSessionStateKey());
+        Session.saveSessionStats(mins);
+        updateTimerUI();
+
+        const overlay = document.getElementById('sessionCompleteOverlay');
+        renderStatsPanel(document.getElementById('sessionCompleteStats'), { justCompletedMins: mins });
+        overlay.classList.add('show');
+    }
+
+    function dismissSessionComplete() {
+        document.getElementById('sessionCompleteOverlay').classList.remove('show');
+        showView('protocol');
+    }
+
+    function toggleFullScreen() {
+        const elem = document.getElementById('playerFrame');
+        if (!document.fullscreenElement) {
+            elem.requestFullscreen().catch(err => alert(`Error attempting to enable full-screen mode: ${err.message}`));
+        } else {
+            document.exitFullscreen();
+        }
+    }
+
+    // ---------- Nav clock in the offcanvas ----------
+    function updateMenuTimer() {
+        const user = Session.getCurrentUser();
+        if (!user) return;
+        const state = JSON.parse(localStorage.getItem(`pressur_active_session_${user.id}`) || 'null');
+        const timerSection = document.getElementById('menuTimerSection');
+
+        if (state && state.isActive) {
+            timerSection.classList.remove('d-none');
+            const remaining = state.endTime - Date.now();
+            document.getElementById('menuTimerClock').textContent = remaining > 0 ? formatTime(remaining / 1000) : '00:00';
+        } else {
+            timerSection.classList.add('d-none');
+        }
     }
 </script>
 </body>

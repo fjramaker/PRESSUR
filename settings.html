@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - PRESSUR™ AWT™</title>
+    <link rel="icon" type="image/png" href="assets/img/logo.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/session.js"></script>
+</head>
+<body>
+
+<nav class="navbar navbar-dark">
+    <div class="container-fluid">
+        <a href="categories.html" class="navbar-brand d-flex align-items-center gap-2 text-decoration-none">
+            <img src="assets/img/logo.png" alt="" style="width:28px;height:28px">
+            <span class="fw-bold text-gradient">PRESSUR™</span>
+        </a>
+        <a href="categories.html" class="btn btn-sm btn-ghost">
+            <i class="bi bi-arrow-left me-1"></i> Back
+        </a>
+    </div>
+</nav>
+
+<main class="container py-4" style="max-width:600px">
+    <div class="eyebrow mb-2">Settings</div>
+    <h2 class="fw-bold mb-4" id="profileName">Profile</h2>
+
+    <div class="session-frame p-4 mb-4">
+        <h6 class="text-uppercase ls-1 mb-3 small eyebrow">Your progress</h6>
+        <div id="statsContainer"></div>
+    </div>
+
+    <div class="session-frame p-4">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h6 class="mb-0 fw-bold">Log out</h6>
+                <p class="x-small mb-0" style="color:var(--muted)">Switch profile or end your session</p>
+            </div>
+            <button class="btn btn-ghost btn-sm" onclick="Session.logout()">Log out</button>
+        </div>
+    </div>
+</main>
+
+<script src="js/stats.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const user = Session.getCurrentUser();
+        if (!user) return;
+        document.getElementById('profileName').textContent = user.name;
+        renderStatsPanel(document.getElementById('statsContainer'));
+    });
+</script>
+</body>
+</html>
