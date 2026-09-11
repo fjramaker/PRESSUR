@@ -111,7 +111,8 @@
         </div>
     </section>
 
-    <section id="view-active" class="view d-flex flex-column align-items-center">
+    <section id="view-active" class="view">
+    <div class="d-flex flex-column align-items-center">
         <div class="session-frame p-4 mb-4 shadow-lg" id="playerFrame">
 
             <div class="d-flex justify-content-between align-items-start mb-3">
@@ -125,8 +126,9 @@
                 </button>
             </div>
 
-            <div class="session-progress"><div class="session-progress-fill" id="sessionProgressFill"></div></div>
-            <div id="waveform" class="mb-2"></div>
+            <div class="session-progress" id="sessionProgressBar"><div class="session-progress-fill" id="sessionProgressFill"></div></div>
+            <div id="audioViz" class="mb-2"></div>
+            <audio id="audioEl" preload="metadata"></audio>
 
             <div class="d-flex justify-content-between px-1 mb-3" style="font-size:.85rem;font-family:monospace;color:var(--muted)">
                 <span id="currentTime">00:00</span>
@@ -206,6 +208,7 @@
                 </div>
             </div>
         </div>
+    </div>
     </section>
 
     <section id="view-science" class="view">
@@ -259,13 +262,27 @@
 
 </main>
 
-<script src="https://unpkg.com/wavesurfer.js@7"></script>
+<div class="mini-player" id="miniPlayer" onclick="showView('active')">
+    <div class="mini-player-eq"><span></span><span></span><span></span></div>
+    <div class="mini-player-info">
+        <div class="mini-player-track" id="miniPlayerTrack">—</div>
+        <div class="mini-player-protocol" id="miniPlayerProtocol">—</div>
+    </div>
+    <button class="mini-player-play" id="miniPlayerPlayBtn">
+        <i class="bi bi-pause-fill" id="miniPlayIcon"></i>
+    </button>
+</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/audiomotion-analyzer@4"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="js/protocols.js"></script>
 <script src="js/stats.js"></script>
 
 <script>
-    let wavesurfer;
+    let audioMotion;
+    const audioEl = document.getElementById('audioEl');
+    let library = {};
     let library = {};
     let hasActiveTrack = false;
     let currentProtocolColor = '#36d1ff';
@@ -293,7 +310,10 @@
         document.querySelectorAll('.nav-link-custom').forEach(l => l.classList.remove('active-page'));
         const navEl = document.getElementById('nav-' + name);
         if (navEl) navEl.classList.add('active-page');
-    }
+
+        // Mini player only makes sense when something's loaded AND we're not already looking at it
+        document.getElementById('miniPlayer').classList.toggle('show', hasActiveTrack && name !== 'active');
+    } 
 
     // ---------- Protocol Selection ----------
     function renderProtocols(lib) {
@@ -346,27 +366,35 @@
     }
 
     function initPlayer() {
-        wavesurfer = WaveSurfer.create({
-            container: '#waveform',
-            waveColor: 'rgba(148, 161, 196, 0.35)',
-            progressColor: currentProtocolColor,
-            cursorColor: '#f3f6fc',
-            barWidth: 3,
-            barGap: 2,
-            height: 160,
-            minPxPerSec: 30,
-            autoCenter: true,
-            interact: true,
-            fillParent: true
+        audioMotion = new AudioMotionAnalyzer(document.getElementById('audioViz'), {
+            source: audioEl,
+            height: 180,
+            mode: 2,
+            showScaleX: false,
+            showScaleY: false,
+            showBgColor: false,
+            showPeaks: true,
+            overlay: true,
+            bgAlpha: 0,
+            smoothing: 0.7
         });
+        // Custom brand gradient — protocol colors + PRESSUR blue, rendered as a
+        // horizontal band the same way their built-in "rainbow" gradient is (dir:'h'),
+        // just with our palette instead of theirs.
+        audioMotion.registerGradient('pressur', {
+            bgColor: '#04060f',
+            dir: 'h',
+            colorStops: [
+                { pos: 0, color: '#36d1ff' },
+                { pos: .35, color: '#36d1b4' },
+                { pos: .65, color: '#ffb436' },
+                { pos: 1, color: '#a78bfa' }
+            ]
+        });
+        audioMotion.gradient = 'pressur';
 
-        wavesurfer.on('audioprocess', (time) => {
-            document.getElementById('currentTime').textContent = formatTime(time);
-            const dur = wavesurfer.getDuration();
-            if (dur) document.getElementById('sessionProgressFill').style.width = `${(time / dur) * 100}%`;
-        });
-        wavesurfer.on('ready', () => {
-            document.getElementById('totalDuration').textContent = formatTime(wavesurfer.getDuration());
+        audioEl.addEventListener('loadedmetadata', () => {
+            document.getElementById('totalDuration').textContent = formatTime(audioEl.duration);
             if ('mediaSession' in navigator) {
                 navigator.mediaSession.metadata = new MediaMetadata({
                     title: document.getElementById('trackTitle').textContent,
@@ -379,8 +407,25 @@
             }
         });
 
+        audioEl.addEventListener('timeupdate', () => {
+            document.getElementById('currentTime').textContent = formatTime(audioEl.currentTime);
+            if (audioEl.duration) document.getElementById('sessionProgressFill').style.width = `${(audioEl.currentTime / audioEl.duration) * 100}%`;
+        });
+
+        audioEl.addEventListener('play', () => setPlayingUI(true));
+        audioEl.addEventListener('pause', () => setPlayingUI(false));
+
         document.getElementById('playPauseBtn').addEventListener('click', togglePlay);
-        document.getElementById('volumeSlider').addEventListener('input', (e) => wavesurfer.setVolume(e.target.value));
+        document.getElementById('miniPlayerPlayBtn').addEventListener('click', (e) => { e.stopPropagation(); togglePlay(); });
+        document.getElementById('volumeSlider').addEventListener('input', (e) => audioEl.volume = e.target.value);
+        audioEl.volume = 0.5;
+
+        document.getElementById('sessionProgressBar').addEventListener('click', (e) => {
+            if (!audioEl.duration) return;
+            const rect = e.currentTarget.getBoundingClientRect();
+            const pct = (e.clientX - rect.left) / rect.width;
+            audioEl.currentTime = pct * audioEl.duration;
+        });
 
         // Simulated placeholder until a real sensor is wired in (see plan notes)
         setInterval(() => {
@@ -396,10 +441,14 @@
     }
 
     function togglePlay() {
-        wavesurfer.playPause();
-        const isPlaying = wavesurfer.isPlaying();
+        if (audioEl.paused) audioEl.play(); else audioEl.pause();
+    }
+
+    function setPlayingUI(isPlaying) {
         document.getElementById('playIcon').className = isPlaying ? 'bi bi-pause-fill fs-2' : 'bi bi-play-fill fs-2';
         document.getElementById('playPauseBtn').classList.toggle('btn-pulse', !isPlaying);
+        document.getElementById('miniPlayIcon').className = isPlaying ? 'bi bi-pause-fill' : 'bi bi-play-fill';
+        document.getElementById('miniPlayer').classList.toggle('playing', isPlaying);
         if ('mediaSession' in navigator) navigator.mediaSession.playbackState = isPlaying ? 'playing' : 'paused';
     }
 
@@ -408,17 +457,22 @@
     function startTrack(filename, categoryKey) {
         const cat = library[categoryKey];
         const meta = getProtocolMeta(cat.benefit);
+        const cleanTitle = filename.replace(/^\d+\./, '').replace(/-compr\.mp3$/, '').replace(/_/g, ' ');
 
         currentTrackFilename = filename;
         currentProtocolColor = meta.color;
-        wavesurfer.setOptions({ progressColor: meta.color });
 
         document.getElementById('sessionProtocolLabel').textContent = `Protocol ${meta.number}`;
         document.getElementById('sessionProtocolLabel').style.color = meta.color;
         document.getElementById('sessionCategory').textContent = cat.benefit;
-        document.getElementById('trackTitle').textContent = filename.replace(/^\d+\./, '').replace(/-compr\.mp3$/, '').replace(/_/g, ' ');
+        document.getElementById('trackTitle').textContent = cleanTitle;
 
-        wavesurfer.load(`assets/audio/${filename}`);
+        document.getElementById('miniPlayerTrack').textContent = cleanTitle;
+        document.getElementById('miniPlayerProtocol').textContent = cat.benefit;
+        document.getElementById('miniPlayerProtocol').style.color = meta.color;
+
+        audioEl.src = `assets/audio/${filename}`;
+        audioEl.play();
         updateFavButtonForCurrentTrack();
 
         document.getElementById('nav-active').classList.remove('nav-item-disabled');
