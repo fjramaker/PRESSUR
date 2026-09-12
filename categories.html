@@ -70,11 +70,12 @@
                     <i class="bi bi-book me-2"></i> Science &amp; About
                 </a>
             </li>
-            <li class="nav-item mb-2">
-                <a class="nav-link" style="color:var(--text)" href="settings.html">
-                    <i class="bi bi-person-circle me-2"></i> Settings
-                </a>
-            </li>
+            <hr style="border-color:var(--line)">
+						<li class="nav-item mb-2">
+								<a class="nav-link" style="color:var(--text)" href="settings.html">
+										<i class="bi bi-person-circle me-2"></i> Settings
+								</a>
+						</li>
             <li class="nav-item mb-2">
                 <span class="nav-link d-flex align-items-center" style="color:var(--dim); cursor:default">
                     <i class="bi bi-graph-up me-2"></i> Analytics <span class="nav-soon">Soon</span>
@@ -115,16 +116,19 @@
     <div class="active-stack">
         <div class="session-frame shadow-lg player-stack" id="playerFrame">
 
-            <div class="d-flex justify-content-between align-items-start mb-3">
-                <div>
-                    <div class="eyebrow mb-1" id="sessionProtocolLabel">Protocol</div>
-                    <h2 id="sessionCategory" class="fw-bold mb-0" style="font-size:1.4rem;color:var(--text)">—</h2>
-                    <p id="trackTitle" class="fw-light mb-0" style="color:var(--muted);font-size:.9rem">—</p>
-                </div>
-                <button class="btn btn-link p-0" style="color:var(--muted)" onclick="toggleFullScreen()">
-                    <i class="bi bi-arrows-fullscreen"></i>
-                </button>
-            </div>
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:16px;">
+								<div>
+										<div class="eyebrow" style="margin-bottom:4px;" id="sessionProtocolLabel">Protocol</div>
+										<div style="display:flex; align-items:center; gap:8px;">
+												<span id="sessionProtocolIcon" style="font-size:1.4rem;"></span>
+												<h2 id="sessionCategory" class="fw-bold" style="margin:0; font-size:1.4rem; color:var(--text);">—</h2>
+										</div>
+										<p id="trackTitle" class="fw-light" style="color:var(--muted); font-size:.9rem; margin:0;">—</p>
+								</div>
+								<button class="btn btn-link p-0" style="color:var(--muted)" onclick="toggleFullScreen()">
+										<i class="bi bi-arrows-fullscreen"></i>
+								</button>
+						</div>
 
             <div class="session-progress" id="sessionProgressBar"><div class="session-progress-fill" id="sessionProgressFill"></div></div>
             <div id="audioViz" class="mb-2"></div>
@@ -167,41 +171,41 @@
             <div class="h3 mb-0 fw-bold"><span id="bpmVal">72</span> <small class="fs-6" style="color:var(--muted)">BPM</small></div>
         </div>
 
-        <div class="row" style="max-width:900px;width:100%">
-            <div class="active-grid">
-                <div class="session-frame p-4 h-100">
-                    <h6 class="text-uppercase ls-1 mb-3 small eyebrow"><i class="bi bi-clock-history me-2"></i>Session duration</h6>
-                    <div id="durationButtons">
-                        <div class="duration-grid">
-                            <button class="btn btn-ghost w-100 py-2 btn-duration" data-mins="15">15m</button>
-                            <button class="btn btn-ghost w-100 py-2 btn-duration" data-mins="30">30m</button>
-                            <button class="btn btn-ghost w-100 py-2 btn-duration" data-mins="45">45m</button>
-                            <button class="btn btn-ghost w-100 py-2 btn-duration" data-mins="60">60m</button>
-                        </div>
-                    </div>
-                    <div id="activeTimerDisplay" class="d-none text-center py-3">
-                        <div class="display-6 fw-bold text-gradient" id="timerClock">00:00</div>
-                        <p class="small mt-2" style="color:var(--muted)">Remaining in session</p>
-                    </div>
-                </div>
-            </div>
+        <div class="active-grid">
+						<div class="session-frame h-100">
+								<h6 class="text-uppercase ls-1 small eyebrow" style="display:flex; align-items:center; gap:8px; margin-bottom:16px;">
+										<i class="bi bi-clock-history"></i> Session duration
+								</h6>
+								<div id="durationButtons">
+										<div class="duration-grid">
+												<button class="btn btn-ghost w-100 btn-duration" style="padding:8px 0;" data-mins="15">15m</button>
+												<button class="btn btn-ghost w-100 btn-duration" style="padding:8px 0;" data-mins="30">30m</button>
+												<button class="btn btn-ghost w-100 btn-duration" style="padding:8px 0;" data-mins="45">45m</button>
+												<button class="btn btn-ghost w-100 btn-duration" style="padding:8px 0;" data-mins="60">60m</button>
+										</div>
+								</div>
+								<div id="activeTimerDisplay" class="d-none text-center" style="padding:16px 0;">
+										<div class="display-6 fw-bold text-gradient" id="timerClock">00:00</div>
+										<p class="small" style="color:var(--muted); margin-top:8px;">Remaining in session</p>
+								</div>
+						</div>
 
-            <div class="col-md-6 pe-0 ps-2">
-                <div class="session-frame p-4 h-100">
-                    <div class="opacity-50">
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <div><h6 class="mb-0 small fw-bold">Biometric adaptation</h6><p class="x-small mb-0" style="color:var(--muted)">Auto-adjust intensity</p></div>
-                            <div class="form-check form-switch"><input class="form-check-input" type="checkbox" disabled></div>
-                        </div>
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <div><h6 class="mb-0 small fw-bold">PRESSUR™ Sync</h6><p class="x-small mb-0" style="color:var(--muted)">Sync chamber lighting</p></div>
-                            <div class="form-check form-switch"><input class="form-check-input" type="checkbox" disabled></div>
-                        </div>
-                        <button class="btn btn-sm w-100" style="background:rgba(255,255,255,.04);color:var(--muted)"><i class="bi bi-download me-2"></i>Download for offline</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+						<div class="session-frame h-100">
+								<div class="opacity-50" style="display:flex; flex-direction:column; gap:16px;">
+										<div style="display:flex; justify-content:space-between; align-items:center;">
+												<div><h6 class="small fw-bold" style="margin:0;">Biometric adaptation</h6><p class="x-small" style="color:var(--muted); margin:0;">Auto-adjust intensity</p></div>
+												<div class="form-check form-switch" style="margin:0;"><input class="form-check-input" type="checkbox" disabled></div>
+										</div>
+										<div style="display:flex; justify-content:space-between; align-items:center;">
+												<div><h6 class="small fw-bold" style="margin:0;">PRESSUR™ Sync</h6><p class="x-small" style="color:var(--muted); margin:0;">Sync chamber lighting</p></div>
+												<div class="form-check form-switch" style="margin:0;"><input class="form-check-input" type="checkbox" disabled></div>
+										</div>
+										<button class="btn btn-sm w-100" style="display:flex; align-items:center; justify-content:center; gap:8px; background:rgba(255,255,255,.04); color:var(--muted);">
+												<i class="bi bi-download"></i> Download for offline
+										</button>
+								</div>
+						</div>
+				</div>
     </div>
     </section>
 
@@ -458,6 +462,8 @@
         document.getElementById('sessionProtocolLabel').textContent = `Protocol ${meta.number}`;
         document.getElementById('sessionProtocolLabel').style.color = meta.color;
         document.getElementById('sessionCategory').textContent = cat.benefit;
+				document.getElementById('sessionProtocolIcon').innerHTML = meta.icon;
+				document.getElementById('sessionProtocolIcon').style.color = meta.color;
         document.getElementById('trackTitle').textContent = cleanTitle;
 
         document.getElementById('miniPlayerTrack').textContent = cleanTitle;
