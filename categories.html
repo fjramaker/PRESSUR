@@ -18,9 +18,23 @@
     <style>
         #playerFrame { position: relative; }
         .science-card { background: rgba(167,139,250,.06); border: 1px solid rgba(167,139,250,.15); border-radius: 16px; padding: 24px; }
-        .science-card h4 { font-size: 14px; font-weight: 700; color: var(--purple); margin-bottom: 8px; }
-        .science-card p { font-size: 13px; line-height: 1.6; color: var(--muted); }
-        .science-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+        .science-card {
+						--pc: var(--purple);
+						background: color-mix(in srgb, var(--pc) 6%, transparent);
+						border: 1px solid color-mix(in srgb, var(--pc) 15%, transparent);
+						border-radius: 16px; padding: 24px;
+				}
+				.science-card h4 { font-size: 14px; font-weight: 700; color: var(--pc); margin-bottom: 8px; }
+				.science-card p { font-size: 13px; line-height: 1.6; color: var(--muted); }
+				.science-icon {
+						width: 36px; height: 36px; border-radius: 10px;
+						background: color-mix(in srgb, var(--pc) 12%, transparent);
+						border: 1px solid color-mix(in srgb, var(--pc) 25%, transparent);
+						color: var(--pc);
+						display: flex; align-items: center; justify-content: center;
+						font-size: 16px; margin-bottom: 12px;
+				}
+				.science-link { font-size: 11px; color: var(--pc); display: inline-block; margin-top: 4px; }
         .how-step { display: flex; gap: 16px; margin-bottom: 24px; }
         .step-num {
             flex-shrink: 0; width: 32px; height: 32px; border-radius: 50%;
@@ -234,27 +248,31 @@
 
         <h5 class="fw-bold mb-4">The research</h5>
         <div class="science-grid mb-3">
-            <div class="science-card">
-                <h4>Auditory Vagal Stimulation</h4>
-                <p>Sound-based signals activate vagal afferents — triggering parasympathetic responses that reduce sympathetic load and improve HRV.</p>
-                <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7862430/" target="_blank" rel="noopener" style="font-size:11px;color:var(--cyan)">PMC7862430 — Frontiers in Neuroscience</a>
-            </div>
-            <div class="science-card">
-                <h4>Low Frequency Entrainment</h4>
-                <p>The brain synchronises its electrical activity to external rhythmic stimuli — shifting dominant brainwave states toward recovery-optimised frequencies.</p>
-                <a href="https://pubmed.ncbi.nlm.nih.gov/3223367" target="_blank" rel="noopener" style="font-size:11px;color:var(--cyan)">PubMed 3223367 — Low Frequency Entrainment</a>
-            </div>
-            <div class="science-card">
-                <h4>Vibroacoustic Recovery</h4>
-                <p>Low-frequency sound waves applied to the body reduce muscle tension, improve circulation, and accelerate tissue recovery at a cellular level.</p>
-                <a href="https://pubmed.ncbi.nlm.nih.gov/23541122/" target="_blank" rel="noopener" style="font-size:11px;color:var(--cyan)">PubMed 23541122 — Vibroacoustic Therapy</a>
-            </div>
-            <div class="science-card">
-                <h4>HRV &amp; Autonomic Regulation</h4>
-                <p>Acoustic protocols measurably improve heart rate variability — the most reliable indicator of CNS recovery and readiness.</p>
-                <a href="https://www.frontiersin.org/articles/10.3389/fnins.2017.00614/full" target="_blank" rel="noopener" style="font-size:11px;color:var(--cyan)">Frontiers in Neuroscience — HRV &amp; Autonomic Regulation</a>
-            </div>
-        </div>
+						<div class="science-card" style="--pc:var(--cyan)">
+								<div class="science-icon"><i class="bi bi-soundwave"></i></div>
+								<h4>Music &amp; Vagal Tone</h4>
+								<p>Relaxing music measurably increases cardiac vagal modulation — slowing heart rate and shifting the autonomic nervous system toward a parasympathetic, recovery-oriented state.</p>
+								<a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9571939/" target="_blank" rel="noopener" class="science-link">Randomized Crossover Study — PMC9571939</a>
+						</div>
+						<div class="science-card" style="--pc:var(--teal, #36d1b4)">
+								<div class="science-icon"><i class="bi bi-activity"></i></div>
+								<h4>Brainwave Entrainment</h4>
+								<p>Binaural beats sit in the same frequency range as EEG activity. The evidence is still developing — some studies show measurable shifts in brain oscillation, others don't — so we treat this as an active research area, not a settled fact.</p>
+								<a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10198548/" target="_blank" rel="noopener" class="science-link">Systematic Review — PLOS ONE, 2023</a>
+						</div>
+						<div class="science-card" style="--pc:var(--purple)">
+								<div class="science-icon"><i class="bi bi-broadcast"></i></div>
+								<h4>Vibroacoustic Recovery</h4>
+								<p>Low-frequency sound around 40&nbsp;Hz has been shown to measurably shift heart rate variability and reduce subjective stress in controlled trials — the basis for vibroacoustic therapy.</p>
+								<a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9223227/" target="_blank" rel="noopener" class="science-link">Randomized Crossover Study — PMC9223227</a>
+						</div>
+						<div class="science-card" style="--pc:var(--amber, #ffb436)">
+								<div class="science-icon"><i class="bi bi-heart-pulse"></i></div>
+								<h4>HRV &amp; Autonomic Regulation</h4>
+								<p>A 2026 meta-analysis of randomized controlled trials confirms music interventions reliably improve HRV — the field's most-used marker of autonomic recovery and nervous-system readiness.</p>
+								<a href="https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2026.1750786/full" target="_blank" rel="noopener" class="science-link">Meta-analysis — Frontiers in Psychology, 2026</a>
+						</div>
+				</div>
         <p class="x-small" style="color:var(--dim)">All sources are peer-reviewed and publicly accessible. Click any reference to read the original study.</p>
     </section>
 
