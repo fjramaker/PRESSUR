@@ -83,6 +83,7 @@ a { color: inherit; }
     transition: .25s;
 }
 .btn-gradient:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(54, 209, 255, .35); color: #fff; }
+.btn-gradient:active { transform: scale(.97); box-shadow: 0 14px 44px rgba(54, 209, 255, .4); }
 
 .btn-ghost {
     background: transparent;
