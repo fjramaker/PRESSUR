@@ -112,8 +112,8 @@
     </section>
 
     <section id="view-active" class="view">
-    <div class="d-flex flex-column align-items-center">
-        <div class="session-frame p-4 mb-4 shadow-lg" id="playerFrame">
+    <div class="active-stack">
+        <div class="session-frame shadow-lg player-stack" id="playerFrame">
 
             <div class="d-flex justify-content-between align-items-start mb-3">
                 <div>
@@ -135,22 +135,16 @@
                 <span id="totalDuration">00:00</span>
             </div>
 
-            <div class="row align-items-center">
-                <div class="col-4">
-                    <button class="btn btn-sm rounded-pill border-0" id="favBtn" style="background:rgba(255,255,255,.05);color:var(--muted)">
-                        <i class="bi bi-star me-2"></i>Favorite
-                    </button>
-                </div>
-                <div class="col-4 text-center">
-                    <button id="playPauseBtn" class="btn btn-gradient rounded-circle mx-auto d-flex align-items-center justify-content-center btn-pulse" style="width:60px;height:60px">
-                        <i class="bi bi-play-fill fs-2" id="playIcon"></i>
-                    </button>
-                </div>
-                <div class="col-4 d-flex justify-content-end align-items-center">
-                    <i class="bi bi-volume-down-fill me-2" style="color:var(--dim)"></i>
-                    <input type="range" class="volume-slider" id="volumeSlider" min="0" max="1" step="0.05" value="0.5">
-                </div>
-            </div>
+            <div class="player-controls">
+								<button class="control-btn" id="favBtn"><i class="bi bi-star"></i></button>
+								<button id="playPauseBtn" class="btn btn-gradient rounded-circle d-flex align-items-center justify-content-center btn-pulse" style="width:56px;height:56px">
+										<i class="bi bi-play-fill fs-3" id="playIcon"></i>
+								</button>
+								<div class="volume-control">
+										<i class="bi bi-volume-down-fill"></i>
+										<input type="range" class="volume-slider" id="volumeSlider" min="0" max="1" step="0.05" value="0.5">
+								</div>
+						</div>
 
             <div class="session-complete-overlay" id="sessionCompleteOverlay">
                 <div class="session-complete-panel">
@@ -162,7 +156,7 @@
             </div>
         </div>
 
-        <div class="session-frame p-3 mb-4 d-flex justify-content-between align-items-center px-4" style="max-width:900px;width:100%">
+        <div class="session-frame d-flex justify-content-between align-items-center" style="max-width:900px;width:100%">
             <div class="d-flex align-items-center">
                 <i class="bi bi-heart-fill text-danger me-3 fs-4 pulse-slow"></i>
                 <div>
@@ -174,15 +168,15 @@
         </div>
 
         <div class="row" style="max-width:900px;width:100%">
-            <div class="col-md-6 ps-0 pe-2">
+            <div class="active-grid">
                 <div class="session-frame p-4 h-100">
                     <h6 class="text-uppercase ls-1 mb-3 small eyebrow"><i class="bi bi-clock-history me-2"></i>Session duration</h6>
                     <div id="durationButtons">
-                        <div class="row g-2">
-                            <div class="col-6"><button class="btn btn-ghost w-100 py-2 btn-duration" data-mins="15">15m</button></div>
-                            <div class="col-6"><button class="btn btn-ghost w-100 py-2 btn-duration" data-mins="30">30m</button></div>
-                            <div class="col-6"><button class="btn btn-ghost w-100 py-2 btn-duration" data-mins="45">45m</button></div>
-                            <div class="col-6"><button class="btn btn-ghost w-100 py-2 btn-duration" data-mins="60">60m</button></div>
+                        <div class="duration-grid">
+                            <button class="btn btn-ghost w-100 py-2 btn-duration" data-mins="15">15m</button>
+                            <button class="btn btn-ghost w-100 py-2 btn-duration" data-mins="30">30m</button>
+                            <button class="btn btn-ghost w-100 py-2 btn-duration" data-mins="45">45m</button>
+                            <button class="btn btn-ghost w-100 py-2 btn-duration" data-mins="60">60m</button>
                         </div>
                     </div>
                     <div id="activeTimerDisplay" class="d-none text-center py-3">
@@ -479,13 +473,14 @@
         showView('active');
     }
 
-    function updateFavButtonForCurrentTrack() {
-        const favBtn = document.getElementById('favBtn');
-        if (!currentTrackFilename) return;
-        const isFav = Session.isFavorite(currentTrackFilename);
-        favBtn.innerHTML = isFav ? '<i class="bi bi-star-fill me-2"></i>Favorited' : '<i class="bi bi-star me-2"></i>Favorite';
-        favBtn.style.color = isFav ? currentProtocolColor : 'var(--muted)';
-    }
+		function updateFavButtonForCurrentTrack() {
+				const favBtn = document.getElementById('favBtn');
+				if (!currentTrackFilename) return;
+				const isFav = Session.isFavorite(currentTrackFilename);
+				favBtn.innerHTML = isFav ? '<i class="bi bi-star-fill"></i>' : '<i class="bi bi-star"></i>';
+				favBtn.classList.toggle('is-active', isFav);
+				favBtn.style.color = isFav ? currentProtocolColor : '';
+		}
 
     document.getElementById('favBtn').addEventListener('click', () => {
         if (!currentTrackFilename) return;
